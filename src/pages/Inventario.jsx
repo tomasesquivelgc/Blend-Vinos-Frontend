@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { fetchWines } from '../lib/api.js'
+import { fetchPaginatedWines } from '../lib/api.js'
 
 export default function Inventario() {
   const location = useLocation()
@@ -8,6 +8,10 @@ export default function Inventario() {
   const [wines, setWines] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [page] = useState(0)
+  const [limit] = useState(50)
+  const [orderBy, setOrderBy] = useState('total')
+  const [order, setOrder] = useState('DESC')
 
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search])
   const q = queryParams.get('q')?.trim() || ''
@@ -17,9 +21,10 @@ export default function Inventario() {
     setLoading(true)
     setError(null)
 
-    fetchWines({ signal: abortController.signal })
+    fetchPaginatedWines({ page, limit, order, orderBy, signal: abortController.signal })
       .then((data) => {
-        setWines(Array.isArray(data) ? data : data?.wines ?? [])
+        const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
+        setWines(list)
       })
       .catch((err) => {
         if (err.name !== 'AbortError') setError(err.message || 'Failed to load wines')
@@ -27,7 +32,7 @@ export default function Inventario() {
       .finally(() => setLoading(false))
 
     return () => abortController.abort()
-  }, [location.key])
+  }, [location.key, page, limit, order, orderBy])
 
   const filteredWines = useMemo(() => {
     if (!q) return wines
@@ -46,8 +51,38 @@ export default function Inventario() {
 
   return (
     <div className="p-6">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <h2 className="text-2xl font-semibold">Inventario</h2>
+        <div className="flex flex-col gap-2 md:flex-row md:items-center">
+          <label className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Ordenar por</span>
+            <select
+              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              value={orderBy}
+              onChange={(e) => setOrderBy(e.target.value)}
+            >
+              <option value="nombre">nombre</option>
+              <option value="cepa">cepa</option>
+              <option value="anejamiento">anejamiento</option>
+              <option value="bodega">bodega</option>
+              <option value="distribuidor">distribuidor</option>
+              <option value="estilo">estilo</option>
+              <option value="costo">costo</option>
+              <option value="total">total</option>
+            </select>
+          </label>
+          <label className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Orden</span>
+            <select
+              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              value={order}
+              onChange={(e) => setOrder(e.target.value)}
+            >
+              <option value="ASC">ASC</option>
+              <option value="DESC">DESC</option>
+            </select>
+          </label>
+        </div>
         {q && (
           <div className="text-sm text-gray-600">
             Mostrando resultados para: <span className="font-medium">{q}</span>
