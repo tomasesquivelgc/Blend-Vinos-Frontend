@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { fetchPaginatedWines } from '../lib/api.js'
 
 export default function AcumuladoList() {
@@ -25,7 +26,10 @@ export default function AcumuladoList() {
 
   return (
     <section>
-      <h3 className="mb-3 text-xl font-semibold">Acumulado</h3>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-xl font-semibold">Acumulado</h3>
+        <Link to="/inventario" className="text-sm text-blue-600 hover:underline">Ver inventario</Link>
+      </div>
       {loading && <div className="text-gray-600">Cargando lista...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
       {!loading && !error && (
