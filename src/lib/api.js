@@ -47,4 +47,34 @@ export async function fetchWineByCode(code, { signal } = {}) {
   return await response.json()
 }
 
+export async function fetchPaginatedWines({ page = 0, limit = 5, order = 'DESC', orderBy = 'total', signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+
+  const url = new URL(`${baseUrl}/api/wines/paginated`)
+  url.searchParams.set('page', String(page))
+  url.searchParams.set('limit', String(limit))
+  url.searchParams.set('order', order)
+  url.searchParams.set('orderBy', orderBy)
+
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
 
