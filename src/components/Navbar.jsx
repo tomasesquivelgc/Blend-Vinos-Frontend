@@ -1,20 +1,37 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { fetchWineByCode } from '../lib/api.js'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [searching, setSearching] = useState(false)
   const navigate = useNavigate()
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault()
     const query = searchTerm.trim()
     if (query.length === 0) {
       navigate('/inventario')
-    } else {
-      navigate(`/inventario?q=${encodeURIComponent(query)}`)
+      setMenuOpen(false)
+      return
     }
-    setMenuOpen(false)
+
+    try {
+      setSearching(true)
+      const result = await fetchWineByCode(query)
+      const id = result?.id ?? result?._id ?? result?.Id ?? result?.IdWine
+      if (id) {
+        navigate(`/inventario/${id}`, { state: { wine: result, code: query } })
+      } else {
+        navigate(`/inventario?q=${encodeURIComponent(query)}`)
+      }
+    } catch (err) {
+      navigate(`/inventario?q=${encodeURIComponent(query)}`)
+    } finally {
+      setSearching(false)
+      setMenuOpen(false)
+    }
   }
 
   return (
@@ -48,10 +65,11 @@ export default function Navbar() {
           />
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="inline-flex items-center justify-center rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+            disabled={searching}
             aria-label="Search"
           >
-            Buscar
+            {searching ? 'Buscando...' : 'Buscar'}
           </button>
         </form>
         <Link to="/" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inicio</Link>
