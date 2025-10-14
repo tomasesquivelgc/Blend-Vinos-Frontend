@@ -78,3 +78,52 @@ export async function fetchPaginatedWines({ page = 0, limit = 5, order = 'DESC',
 }
 
 
+export async function fetchUsers({ signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+
+  const response = await fetch(`${baseUrl}/api/users/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
+export async function createMovement(body, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+
+  const response = await fetch(`${baseUrl}/api/movements/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+

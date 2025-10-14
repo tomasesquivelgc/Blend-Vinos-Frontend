@@ -7,6 +7,7 @@ import ProductDetail from './pages/ProductDetail.jsx'
 import Usuarios from './pages/Usuarios.jsx'
 import Configuraciones from './pages/Configuraciones.jsx'
 import NotFound from './pages/NotFound.jsx'
+import Movimientos from './pages/Movimientos.jsx'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/inventario/:id" element={<ProductDetail />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/configuraciones" element={<Configuraciones />} />
+        <Route path="/movimientos" element={<Movimientos />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
