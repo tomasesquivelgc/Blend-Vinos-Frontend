@@ -8,6 +8,7 @@ import Usuarios from './pages/Usuarios.jsx'
 import Configuraciones from './pages/Configuraciones.jsx'
 import NotFound from './pages/NotFound.jsx'
 import Movimientos from './pages/Movimientos.jsx'
+import WineForm from './pages/WineForm.jsx'
 
 function App() {
 
@@ -20,6 +21,8 @@ function App() {
         <Route path="/inventario" element={<Inventario />} />
         <Route path="/historial" element={<Historial />} />
         <Route path="/inventario/:id" element={<ProductDetail />} />
+        <Route path="/inventario/nuevo" element={<WineForm mode="create" />} />
+        <Route path="/inventario/editar/:id" element={<WineForm mode="edit" />} />
         <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/configuraciones" element={<Configuraciones />} />
         <Route path="/movimientos" element={<Movimientos />} />

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { fetchPaginatedWines } from '../lib/api.js'
+import { fetchPaginatedWines, deleteWine } from '../lib/api.js'
 
 export default function Inventario() {
   const location = useLocation()
@@ -49,6 +49,26 @@ export default function Inventario() {
     navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true })
   }
 
+  const handleCreate = () => {
+    navigate('/inventario/nuevo')
+  }
+
+  const handleEdit = (id) => {
+    navigate(`/inventario/editar/${id}`)
+  }
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm('¿Seguro que deseas eliminar este vino? Esta acción no se puede deshacer.')
+    if (!confirmed) return
+    try {
+      await deleteWine(id)
+      // Refresh list
+      setWines(prev => prev.filter(w => (w.id || w._id) !== id))
+    } catch (e) {
+      alert(e.message || 'Error eliminando el vino')
+    }
+  }
+
   return (
     <div className="p-6">
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -83,6 +103,9 @@ export default function Inventario() {
             </select>
           </label>
         </div>
+        <div>
+          <button className="rounded bg-blue-600 px-3 py-2 text-white" onClick={handleCreate}>Crear nuevo vino</button>
+        </div>
         {q && (
           <div className="text-sm text-gray-600">
             Mostrando resultados para: <span className="font-medium">{q}</span>
@@ -101,10 +124,18 @@ export default function Inventario() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredWines.map((wine) => (
             <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm">
-              <div className="mb-1 text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
-              <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
-              <div className="text-sm text-gray-600">{wine.costo}</div>
-              <div className="mt-2 flex justify-end">{wine.stockreal}</div>
+              <div className="mb-1 flex items-start justify-between">
+                <div>
+                  <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
+                  <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
+                  <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
+                  <div className="text-sm text-gray-600">Stock: {wine.stockreal ?? wine.stockReal}</div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                  <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                </div>
+              </div>
             </div>
           ))}
           {filteredWines.length === 0 && (

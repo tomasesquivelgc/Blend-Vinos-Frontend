@@ -158,3 +158,104 @@ export async function fetchMovementsByMonth({ year, month, signal } = {}) {
   return await response.json()
 }
 
+export async function createWine(body, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+
+  const response = await fetch(`${baseUrl}/api/wines/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
+export async function updateWine(id, body, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+  if (!id) throw new Error('id is required')
+
+  const response = await fetch(`${baseUrl}/api/wines/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
+export async function deleteWine(id, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+  if (!id) throw new Error('id is required')
+
+  const response = await fetch(`${baseUrl}/api/wines/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return true
+}
+
+export async function fetchWineById(id, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+  if (!id) throw new Error('id is required')
+
+  const response = await fetch(`${baseUrl}/api/wines/${encodeURIComponent(id)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
