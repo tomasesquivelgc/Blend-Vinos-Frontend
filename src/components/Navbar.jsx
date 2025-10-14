@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchWineByCode } from '../lib/api.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [searching, setSearching] = useState(false)
   const navigate = useNavigate()
+  const { logout } = useAuth()
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault()
@@ -77,7 +79,15 @@ export default function Navbar() {
         <Link to="/historial" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Historial</Link>
         <Link to="/usuarios" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Usuarios</Link>
         <Link to="/configuraciones" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Configuraciones</Link>
-        <Link to="/checkout" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Cerrar sesión</Link>
+        <button 
+          className="text-blue-600 hover:underline" 
+          onClick={() => {
+            logout()
+            setMenuOpen(false)
+          }}
+        >
+          Cerrar sesión
+        </button>
       </div>
     </nav>
   )

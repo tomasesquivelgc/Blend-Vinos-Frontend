@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 import Navbar from './components/Navbar.jsx'
 import Home from './pages/Home.jsx'
 import Inventario from './pages/Inventario.jsx'
@@ -10,8 +11,22 @@ import NotFound from './pages/NotFound.jsx'
 import Movimientos from './pages/Movimientos.jsx'
 import WineForm from './pages/WineForm.jsx'
 import UserForm from './pages/UserForm.jsx'
+import Login from './pages/Login.jsx'
 
-function App() {
+function AppContent() {
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Cargando...</div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return <Login />
+  }
 
   return (
     <div className="p-6">
@@ -31,6 +46,14 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
