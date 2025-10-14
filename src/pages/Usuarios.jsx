@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchUsers } from '../lib/api.js'
+import { fetchUsers, deleteUser } from '../lib/api.js'
 
 export default function Users() {
   const navigate = useNavigate()
@@ -29,6 +29,18 @@ export default function Users() {
 
   const handleCreate = () => {
     navigate('/usuarios/nuevo')
+  }
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm('¿Seguro que deseas eliminar este usuario? Esta acción no se puede deshacer.')
+    if (!confirmed) return
+    try {
+      await deleteUser(id)
+      // Refresh list
+      setUsers(prev => prev.filter(u => u.id !== id))
+    } catch (e) {
+      alert(e.message || 'Error eliminando el usuario')
+    }
   }
 
   const getRoleName = (roleId) => {
@@ -62,8 +74,16 @@ export default function Users() {
                 <div className="text-sm text-gray-600">Rol: {getRoleName(user.roleid || user.role_id)}</div>
                 {user.phone && <div className="text-sm text-gray-600">Tel: {user.phone}</div>}
               </div>
-              <div className="text-sm text-gray-500">
-                ID: {user.id}
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-gray-500">
+                  ID: {user.id}
+                </div>
+                <button 
+                  className="rounded border px-2 py-1 text-sm text-red-700" 
+                  onClick={() => handleDelete(user.id)}
+                >
+                  Borrar usuario
+                </button>
               </div>
             </div>
           ))}
