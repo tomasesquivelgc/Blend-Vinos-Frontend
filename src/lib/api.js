@@ -127,3 +127,34 @@ export async function createMovement(body, { signal } = {}) {
   return await response.json()
 }
 
+export async function fetchMovementsByMonth({ year, month, signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = import.meta.env.VITE_AUTH_TOKEN
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('VITE_AUTH_TOKEN is not set')
+  if (typeof year !== 'number' || typeof month !== 'number') {
+    throw new Error('year and month are required numbers')
+  }
+
+  const url = new URL(`${baseUrl}/api/movements/by-month`)
+  url.searchParams.set('year', String(year))
+  url.searchParams.set('month', String(month))
+
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
