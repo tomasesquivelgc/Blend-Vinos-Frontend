@@ -370,3 +370,26 @@ export async function login(credentials, { signal } = {}) {
   return data
 }
 
+export async function fetchTopSoldWines({ signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = getAuthToken()
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('No authentication token')
+
+  const response = await fetch(`${baseUrl}/api/movements/top-sold`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
