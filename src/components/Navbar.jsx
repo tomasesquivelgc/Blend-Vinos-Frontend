@@ -21,14 +21,18 @@ export default function Navbar() {
 
     try {
       setSearching(true)
-      const result = await fetchWineByCode(query)
-      const id = result?.id ?? result?._id ?? result?.Id ?? result?.IdWine
-      if (id) {
-        navigate(`/inventario/${id}`, { state: { wine: result, code: query } })
+      const results = await fetchWineByCode(query) // always an array
+
+      if (Array.isArray(results) && results.length === 1) {
+        // Single match → navigate directly
+        const wine = results[0]
+        navigate(`/inventario/${wine.id || wine._id}`, { state: { wine, code: query } })
       } else {
+        // Multiple matches → navigate to inventory with search query
         navigate(`/inventario?q=${encodeURIComponent(query)}`)
       }
     } catch (err) {
+      // On error → go to inventory with query
       navigate(`/inventario?q=${encodeURIComponent(query)}`)
     } finally {
       setSearching(false)
@@ -45,7 +49,7 @@ export default function Navbar() {
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             {menuOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             ) : (

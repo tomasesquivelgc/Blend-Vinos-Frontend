@@ -38,8 +38,8 @@ export default function Inventario() {
     if (!q) return wines
     const lower = q.toLowerCase()
     return wines.filter((w) =>
-      String(w.name || '').toLowerCase().includes(lower) ||
-      String(w.varietal || '').toLowerCase().includes(lower) ||
+      String(w.nombre || '').toLowerCase().includes(lower) ||
+      String(w.cepa || '').toLowerCase().includes(lower) ||
       String(w.region || '').toLowerCase().includes(lower)
     )
   }, [wines, q])
@@ -49,20 +49,14 @@ export default function Inventario() {
     navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true })
   }
 
-  const handleCreate = () => {
-    navigate('/inventario/nuevo')
-  }
-
-  const handleEdit = (id) => {
-    navigate(`/inventario/editar/${id}`)
-  }
+  const handleCreate = () => navigate('/inventario/nuevo')
+  const handleEdit = (id) => navigate(`/inventario/editar/${id}`)
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm('¿Seguro que deseas eliminar este vino? Esta acción no se puede deshacer.')
     if (!confirmed) return
     try {
       await deleteWine(id)
-      // Refresh list
       setWines(prev => prev.filter(w => (w.id || w._id) !== id))
     } catch (e) {
       alert(e.message || 'Error eliminando el vino')
@@ -114,37 +108,37 @@ export default function Inventario() {
         )}
       </div>
 
-      {loading && (
-        <div className="text-gray-600">Cargando vinos...</div>
-      )}
-      {error && (
-        <div className="text-red-600">Error: {error}</div>
-      )}
+      {loading && <div className="text-gray-600">Cargando vinos...</div>}
+      {error && <div className="text-red-600">Error: {error}</div>}
+
       {!loading && !error && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredWines.map((wine) => (
-            <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm">
-              <div className="mb-1 flex items-start justify-between">
-                <div>
-                  <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
-                  <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
-                  <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
-                  <div className="text-sm text-gray-600">Stock: {wine.stockreal ?? wine.stockReal}</div>
-                </div>
-                <div className="flex gap-2">
-                  <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
-                  <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+        <>
+          {Array.isArray(filteredWines) && filteredWines.length > 1 && (
+            <div className="text-sm text-gray-600 mb-2">
+              Se encontraron {filteredWines.length} resultados para: <span className="font-medium">{q}</span>
+            </div>
+          )}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredWines.map((wine) => (
+              <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm">
+                <div className="mb-1 flex items-start justify-between">
+                  <div>
+                    <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
+                    <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
+                    <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
+                    <div className="text-sm text-gray-600">Stock: {wine.stockreal ?? wine.stockReal}</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                    <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-          {filteredWines.length === 0 && (
-            <div className="text-gray-600">No se encontraron vinos.</div>
-          )}
-        </div>
+            ))}
+            {filteredWines.length === 0 && <div className="text-gray-600">No se encontraron vinos.</div>}
+          </div>
+        </>
       )}
     </div>
   )
 }
-
-
