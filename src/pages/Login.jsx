@@ -25,7 +25,7 @@ export default function Login() {
 
     try {
       const data = await login(form)
-      setAuth(data.token)
+      setAuth(data.token, data.user)
       navigate('/')
     } catch (e) {
       setError(e.message || 'Error al iniciar sesión')

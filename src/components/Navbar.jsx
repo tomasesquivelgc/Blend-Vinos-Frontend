@@ -8,7 +8,7 @@ export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState('')
   const [searching, setSearching] = useState(false)
   const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { user, logout } = useAuth()  // ✅ get user here
 
   const handleSearchSubmit = async (e) => {
     e.preventDefault()
@@ -24,15 +24,12 @@ export default function Navbar() {
       const results = await fetchWineByCode(query) // always an array
 
       if (Array.isArray(results) && results.length === 1) {
-        // Single match → navigate directly
         const wine = results[0]
         navigate(`/inventario/${wine.id || wine._id}`, { state: { wine, code: query } })
       } else {
-        // Multiple matches → navigate to inventory with search query
         navigate(`/inventario?q=${encodeURIComponent(query)}`)
       }
     } catch (err) {
-      // On error → go to inventory with query
       navigate(`/inventario?q=${encodeURIComponent(query)}`)
     } finally {
       setSearching(false)
@@ -78,10 +75,15 @@ export default function Navbar() {
             {searching ? 'Buscando...' : 'Buscar'}
           </button>
         </form>
-        <Link to="/" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inicio</Link>
+        {/* Only show admin routes if user is admin */}
+        {user?.rol_id === 1 && (
+          <>
+            <Link to="/" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inicio</Link>
+            <Link to="/historial" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Historial</Link>
+            <Link to="/usuarios" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Usuarios</Link>
+          </>
+        )}
         <Link to="/inventario" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inventario</Link>
-        <Link to="/historial" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Historial</Link>
-        <Link to="/usuarios" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Usuarios</Link>
         <Link to="/configuraciones" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Configuraciones</Link>
         <button 
           className="text-blue-600 hover:underline" 
