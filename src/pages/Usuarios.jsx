@@ -72,6 +72,7 @@ export default function Users() {
                 <div className="font-medium">{user.name || user.username || 'Sin nombre'}</div>
                 <div className="text-sm text-gray-600">{user.email}</div>
                 <div className="text-sm text-gray-600">Rol: {getRoleName(user.roleid || user.role_id)}</div>
+                <div className="text-sm text-gray-600">Username: {user.username}</div>
                 {user.phone && <div className="text-sm text-gray-600">Tel: {user.phone}</div>}
               </div>
               <div className="flex items-center gap-2">
