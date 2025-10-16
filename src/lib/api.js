@@ -422,3 +422,28 @@ export async function fetchCurrentUser({ signal } = {}) {
 
   return await response.json();
 }
+
+export async function resetUserPassword(id, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = getAuthToken()
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('No authentication token')
+  if (!id) throw new Error('id is required')
+
+  const response = await fetch(`${baseUrl}/api/users/${encodeURIComponent(id)}/reset-password`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}

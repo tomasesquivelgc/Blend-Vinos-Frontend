@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchUsers, deleteUser } from '../lib/api.js'
+import { fetchUsers, deleteUser, resetUserPassword } from '../lib/api.js'
 
 export default function Users() {
   const navigate = useNavigate()
@@ -43,6 +43,17 @@ export default function Users() {
     }
   }
 
+  const handleResetPassword = async (id) => {
+    const confirmed = window.confirm('¿Seguro que deseas restablecer la contraseña de este usuario a "Contraseña123"?')
+    if (!confirmed) return
+    try {
+      await resetUserPassword(id)
+      alert('Contraseña restablecida exitosamente.')
+    } catch (e) {
+      alert(e.message || 'Error al restablecer la contraseña')
+    }
+  }  
+
   const getRoleName = (roleId) => {
     const roles = { 1: 'Admin', 2: 'Socio', 3: 'Revendedor' }
     return roles[roleId] || 'Desconocido'
@@ -79,6 +90,12 @@ export default function Users() {
                 <div className="text-sm text-gray-500">
                   ID: {user.id}
                 </div>
+                <button 
+                  className="rounded border px-2 py-1 text-sm text-yellow-700" 
+                  onClick={() => handleResetPassword(user.id)}
+                >
+                  Resetear contraseña
+                </button>
                 <button 
                   className="rounded border px-2 py-1 text-sm text-red-700" 
                   onClick={() => handleDelete(user.id)}
