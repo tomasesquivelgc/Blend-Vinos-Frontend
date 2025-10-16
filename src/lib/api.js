@@ -393,3 +393,32 @@ export async function fetchTopSoldWines({ signal } = {}) {
 
   return await response.json()
 }
+
+export async function fetchCurrentUser({ signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE;
+  const token = getAuthToken();
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set');
+  if (!token) throw new Error('No authentication token');
+
+  const response = await fetch(`${baseUrl}/api/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  });
+
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('token');
+      throw new Error('Session expired. Please log in again.');
+    }
+
+    const text = await response.text();
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`);
+  }
+
+  return await response.json();
+}

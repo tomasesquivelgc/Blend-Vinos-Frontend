@@ -64,10 +64,10 @@ export default function MasVendidos() {
               {item.vino_nombre}
             </h3>
             <p className="text-sm text-gray-600">
-              Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
+              Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
             </p>
             <p className="text-sm text-gray-600">
-              Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
+              Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
             </p>
             <p className="text-sm text-green-600 font-semibold mt-2">
               Total dinero: ${Number(item.total_dinero).toFixed(2)}

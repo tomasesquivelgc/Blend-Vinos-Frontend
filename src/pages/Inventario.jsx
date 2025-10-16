@@ -126,7 +126,7 @@ export default function Inventario() {
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
                     <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
                     <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
-                    <div className="text-sm text-gray-600">Stock: {wine.stockreal ?? wine.stockReal}</div>
+                    <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>
                   </div>
                   <div className="flex gap-2">
                     <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
