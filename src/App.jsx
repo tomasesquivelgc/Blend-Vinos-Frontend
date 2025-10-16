@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
@@ -46,6 +46,13 @@ function AppContent() {
       <Navbar />
 
       <Routes>
+        {/* ✅ Automatically redirect non-admins away from "/" */}
+        <Route
+          path="/"
+          element={
+            user?.rol_id === 1 ? <Home /> : <Navigate to="/inventario" replace />
+          }
+        />
         {/* Admin-only routes */}
         <Route
           path="/"
