@@ -42,7 +42,7 @@ function AppContent() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-2">
       <Navbar />
 
       <Routes>
