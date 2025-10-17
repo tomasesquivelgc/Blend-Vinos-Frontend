@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { fetchWineByCode } from '../lib/api.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
@@ -71,12 +71,12 @@ export default function Navbar() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar en inventario..."
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none md:w-64"
+            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-64"
             aria-label="Search"
           />
           <button
             type="submit"
-            className="inline-flex items-center justify-center rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded bg-blend-purple px-3 py-2 text-sm font-medium text-white hover:bg-blend-purple-dark disabled:opacity-60 hover:cursor-pointer"
             disabled={searching}
             aria-label="Search"
           >
@@ -86,15 +86,15 @@ export default function Navbar() {
         {/* Only show admin routes if user is admin */}
         {user?.rol_id === 1 && (
           <>
-            <Link to="/" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inicio</Link>
-            <Link to="/historial" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Historial</Link>
-            <Link to="/usuarios" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Usuarios</Link>
+            <NavLink to="/" onClick={() => setMenuOpen(false)} className={({ isActive }) => `${isActive ? 'text-blend-pink' : 'text-blend-text-purple'} hover:underline font-medium`} end>Inicio</NavLink>
+            <NavLink to="/historial" onClick={() => setMenuOpen(false)} className={({ isActive }) => `${isActive ? 'text-blend-pink' : 'text-blend-text-purple'} hover:underline font-medium`}>Historial</NavLink>
+            <NavLink to="/usuarios" onClick={() => setMenuOpen(false)} className={({ isActive }) => `${isActive ? 'text-blend-pink' : 'text-blend-text-purple'} hover:underline font-medium`}>Usuarios</NavLink>
           </>
         )}
-        <Link to="/inventario" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Inventario</Link>
-        <Link to="/configuraciones" className="text-blue-600 hover:underline" onClick={() => setMenuOpen(false)}>Configuraciones</Link>
-        <button 
-          className="text-blue-600 hover:underline" 
+        <NavLink to="/inventario" onClick={() => setMenuOpen(false)} className={({ isActive }) => `${isActive ? 'text-blend-pink' : 'text-blend-text-purple'} hover:underline font-medium`}>Inventario</NavLink>
+        <NavLink to="/configuraciones" onClick={() => setMenuOpen(false)} className={({ isActive }) => `${isActive ? 'text-blend-pink' : 'text-blend-text-purple'} hover:underline font-medium`}>Configuraciones</NavLink>
+        <button
+          className="text-blend-text-purple hover:underline font-medium hover:cursor-pointer"
           onClick={() => {
             logout()
             setMenuOpen(false)
