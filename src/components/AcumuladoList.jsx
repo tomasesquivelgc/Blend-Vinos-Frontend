@@ -26,9 +26,16 @@ export default function AcumuladoList() {
 
   return (
     <section>
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Acumulado</h3>
-        <Link to="/inventario" className="text-sm text-blue-600 hover:underline">Ver inventario</Link>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex-1 text-center">
+          <h3 className="text-xl font-semibold">Acumulado</h3>
+        </div>
+        <Link
+          to="/inventario"
+          className="text-sm text-blue-600 hover:underline"
+        >
+          Ver inventario
+        </Link>
       </div>
       {loading && <div className="text-gray-600">Cargando lista...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}

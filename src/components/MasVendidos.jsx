@@ -49,12 +49,11 @@ export default function MasVendidos() {
   }
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+    <div className="">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">
         🏆 Vinos Más Vendidos del Mes
       </h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="flex flex-col">
         {data.map((item, index) => (
           <div
             key={index}
