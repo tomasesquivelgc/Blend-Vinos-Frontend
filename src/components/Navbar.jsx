@@ -71,7 +71,7 @@ export default function Navbar() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar en inventario..."
-            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-64"
+            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-64 bg-gray-50"
             aria-label="Search"
           />
           <button

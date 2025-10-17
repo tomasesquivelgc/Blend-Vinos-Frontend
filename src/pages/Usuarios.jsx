@@ -78,7 +78,7 @@ export default function Users() {
         <div className="space-y-2">
           {users.length === 0 && <p>No hay usuarios.</p>}
           {users.map(user => (
-            <div key={user.id} className="border rounded p-3 flex items-center justify-between">
+            <div key={user.id} className="border rounded p-3 flex items-center justify-between bg-gray-50">
               <div className="space-y-1">
                 <div className="font-medium">{user.name || user.username || 'Sin nombre'}</div>
                 <div className="text-sm text-gray-600">{user.email}</div>

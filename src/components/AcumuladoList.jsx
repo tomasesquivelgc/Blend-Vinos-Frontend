@@ -32,7 +32,7 @@ export default function AcumuladoList() {
         </div>
         <Link
           to="/inventario"
-          className="text-sm text-blue-600 hover:underline"
+          className="text-sm text-blend-purple hover:underline"
         >
           Ver inventario
         </Link>
@@ -42,7 +42,7 @@ export default function AcumuladoList() {
       {!loading && !error && (
         <ul className="divide-y divide-gray-200 rounded border border-gray-200 bg-white">
           {items.map((w) => (
-            <li key={w.id || w._id || w.codigo} className="p-3">
+            <li key={w.id || w._id || w.codigo} className="p-3 bg-gray-50">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-medium">{w.nombre || w.name || 'Sin nombre'}</div>

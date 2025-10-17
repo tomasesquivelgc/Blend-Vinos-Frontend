@@ -120,7 +120,7 @@ export default function Inventario() {
           )}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredWines.map((wine) => (
-              <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm">
+              <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-gray-50">
                 <div className="mb-1 flex items-start justify-between">
                   <div>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>

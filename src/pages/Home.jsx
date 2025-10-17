@@ -16,13 +16,13 @@ export default function Home() {
       </div>
       <div className="flex gap-3 m-4 max-w-md mx-auto">
         <button
-          className="flex-1 px-4 py-2 rounded bg-blend-purple text-white"
+          className="flex-1 px-4 py-2 rounded bg-blend-purple text-white hover:bg-blend-purple-dark hover:cursor-pointer"
           onClick={() => navigate('/movimientos', { state: { type: 'COMPRA' } })}
         >
           COMPRA
         </button>
         <button
-          className="flex-1 px-4 py-2 rounded bg-blend-purple text-white"
+          className="flex-1 px-4 py-2 rounded bg-blend-purple text-white hover:bg-blend-purple-dark hover:cursor-pointer"
           onClick={() => navigate('/movimientos', { state: { type: 'VENTA' } })}
         >
           VENTA
