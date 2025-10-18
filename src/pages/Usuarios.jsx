@@ -62,9 +62,8 @@ export default function Users() {
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">Usuarios</h2>
         <button 
-          className="rounded bg-blue-600 px-3 py-2 text-white" 
+          className="rounded bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer px-3 py-2 text-white" 
           onClick={handleCreate}
         >
           Crear nuevo usuario
@@ -91,7 +90,7 @@ export default function Users() {
                   ID: {user.id}
                 </div>
                 <button 
-                  className="rounded border px-2 py-1 text-sm text-yellow-700" 
+                  className="rounded border px-2 py-1 text-sm text-blend-purple" 
                   onClick={() => handleResetPassword(user.id)}
                 >
                   Resetear contraseña

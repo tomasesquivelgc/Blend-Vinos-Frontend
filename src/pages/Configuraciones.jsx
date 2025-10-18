@@ -140,7 +140,7 @@ export default function Configuraciones() {
             ) : (
               <button
                 onClick={() => handleEditClick(field)}
-                className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+                className="text-sm bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer text-white px-3 py-1 rounded"
               >
                 Editar
               </button>
@@ -171,7 +171,7 @@ export default function Configuraciones() {
           <button
             onClick={handlePasswordUpdate}
             disabled={loading}
-            className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded"
+            className="bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer text-white px-4 py-2 rounded"
           >
             {loading ? "Guardando..." : "Cambiar contraseña"}
           </button>

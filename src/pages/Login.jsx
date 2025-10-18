@@ -37,6 +37,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-blend-yellow-gradient py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        <img src="/src/assets/blend-logo.png" alt="Blend logo" />
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Iniciar Sesión
@@ -49,14 +50,14 @@ export default function Login() {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="username" className="sr-only">
-                Username
+                Nombre de usuario
               </label>
               <input
                 id="username"
                 name="username"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blend-pink focus:border-blend-pink focus:z-10 sm:text-sm"
                 placeholder="Username"
                 value={form.username}
                 onChange={handleChange}
@@ -64,14 +65,14 @@ export default function Login() {
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                Contraseña
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:border-blend-pink focus:ring-blend-pink focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}
@@ -89,7 +90,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blend-purple hover:bg-blend-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blend-purple-light disabled:opacity-50"
             >
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>

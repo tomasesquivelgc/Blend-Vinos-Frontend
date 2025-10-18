@@ -51,16 +51,16 @@ export default function Historial() {
   }
 
   const monthLabel = useMemo(() => {
-    const date = new Date(year, month - 1, 1)
-    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })
-  }, [year, month])
+  const date = new Date(year, month - 1, 1)
+  const monthName = date.toLocaleDateString('es-ES', { month: 'long' })
+  return `${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}`
+}, [year, month])
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Historial</h2>
         <div className="flex items-center gap-2">
-          <button className="px-3 py-1 border rounded" onClick={goPrevMonth} aria-label="Mes anterior">←</button>
+          <button className="px-3 py-1 border rounded text-blend-purple hover:cursor-pointer" onClick={goPrevMonth} aria-label="Mes anterior">←</button>
           <span className="min-w-[180px] text-center capitalize">{monthLabel}</span>
           {(() => {
             const today = new Date()
@@ -69,7 +69,7 @@ export default function Historial() {
             const isCurrent = year === currentYear && month === currentMonth
             return (
               <button
-                className={`px-3 py-1 border rounded ${isCurrent ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`px-3 py-1 border rounded ${isCurrent ? 'opacity-50 cursor-not-allowed' : 'text-blend-purple hover:cursor-pointer'}`}
                 onClick={goNextMonth}
                 aria-label="Mes siguiente"
                 disabled={isCurrent}
