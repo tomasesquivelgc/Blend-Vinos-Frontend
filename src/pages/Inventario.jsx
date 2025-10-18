@@ -68,7 +68,6 @@ export default function Inventario() {
   return (
     <div className="p-6">
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <h2 className="text-2xl font-semibold">Inventario</h2>
         <div className="flex flex-col gap-2 md:flex-row md:items-center">
           <label className="flex items-center gap-2">
             <span className="text-sm text-gray-700">Ordenar por</span>

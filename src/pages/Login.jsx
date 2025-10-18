@@ -57,7 +57,7 @@ export default function Login() {
                 name="username"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blend-pink focus:border-blend-pink focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blend-purple focus:border-blend-purple focus:z-10 sm:text-sm"
                 placeholder="Username"
                 value={form.username}
                 onChange={handleChange}
@@ -72,7 +72,7 @@ export default function Login() {
                 name="password"
                 type="password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:border-blend-pink focus:ring-blend-pink focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:border-blend-purple focus:ring-blend-purple focus:z-10 sm:text-sm"
                 placeholder="Password"
                 value={form.password}
                 onChange={handleChange}

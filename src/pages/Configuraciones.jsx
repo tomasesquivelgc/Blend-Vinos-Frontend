@@ -106,8 +106,6 @@ export default function Configuraciones() {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-semibold">Configuraciones</h2>
-
       <div className="space-y-4">
         {["nombre", "email", "nombredeusuario", "telefono"].map((field) => (
           <div
