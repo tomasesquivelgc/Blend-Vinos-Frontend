@@ -88,7 +88,7 @@ export default function Historial() {
         <div className="space-y-2">
           {data.length === 0 && <p>No hay movimientos para este mes.</p>}
           {data.map(item => (
-            <div key={item.id} className="border rounded p-3 flex items-center justify-between bg-gray-50">
+            <div key={item.id} className="border rounded p-3 flex items-center justify-between bg-white">
               <div className="space-y-1">
                 <div className="text-sm text-gray-600">{item.fecha ? new Date(item.fecha).toLocaleString() : ''}</div>
                 <div className="font-medium">{item.vino_nombre || `Vino #${item.vino_id}`}</div>
