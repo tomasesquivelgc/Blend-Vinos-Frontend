@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchPaginatedWines, deleteWine } from '../lib/api.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Inventario() {
   const location = useLocation()
@@ -12,6 +13,7 @@ export default function Inventario() {
   const [limit] = useState(50)
   const [orderBy, setOrderBy] = useState('total')
   const [order, setOrder] = useState('DESC')
+  const { user } = useAuth()
 
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search])
   const q = queryParams.get('q')?.trim() || ''
@@ -97,9 +99,11 @@ export default function Inventario() {
             </select>
           </label>
         </div>
-        <div>
-          <button className="rounded bg-blue-600 px-3 py-2 text-white" onClick={handleCreate}>Crear nuevo vino</button>
-        </div>
+        {user?.rol_id === 1 && (
+          <div>
+            <button className="rounded bg-blue-600 px-3 py-2 text-white" onClick={handleCreate}>Crear nuevo vino</button>
+          </div>
+        )}
         {q && (
           <div className="text-sm text-gray-600">
             Mostrando resultados para: <span className="font-medium">{q}</span>
@@ -129,10 +133,12 @@ export default function Inventario() {
                     <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>
                     <div className="text-sm text-gray-600">Precio Recomendado de venta: {wine.precioRecomendado ?? '-'}</div>
                   </div>
-                  <div className="flex gap-2">
-                    <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
-                    <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
-                  </div>
+                  {user?.rol_id === 1 && (
+                    <div className="flex gap-2">
+                      <button className="rounded border px-2 py-1 text-sm" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                      <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
