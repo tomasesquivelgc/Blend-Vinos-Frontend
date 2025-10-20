@@ -120,7 +120,7 @@ export default function Configuraciones() {
                   name={field}
                   value={formData[field] || ""}
                   onChange={handleChange}
-                  className="mt-1 border rounded px-2 py-1 w-64  bg-white"
+                  className="mt-1 border rounded px-2 py-1 w-40 md:w-64  bg-white"
                 />
               ) : (
                 <p className="font-medium">{user[field]}</p>

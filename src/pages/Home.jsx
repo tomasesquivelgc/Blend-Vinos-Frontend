@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 export default function Home() {
   const navigate = useNavigate()
   return (
-    <div className="py-2 px-4">
+    <div className="p-6">
       <div className='flex flex-col md:flex-row gap-4'>
         <div className="w-full md:w-1/2">
           <AcumuladoList />

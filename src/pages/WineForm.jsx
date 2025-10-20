@@ -46,7 +46,7 @@ export default function WineForm({ mode = 'create' }) {
           distribuidor: data.distribuidor ?? '',
           estilo: data.estilo ?? '',
           total: data.total ?? '',
-          stockReal: data.stockReal ?? data.stockreal ?? '',
+          stockReal: data.total ?? '',
           costo: data.costo ?? '',
         }
         setOriginal(normalized)
@@ -130,7 +130,7 @@ export default function WineForm({ mode = 'create' }) {
           <input className="border rounded px-3 py-2 bg-white" name="cepa" value={form.cepa} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-gray-700">Anejamiento</span>
+          <span className="text-sm text-gray-700">Añejamiento</span>
           <input className="border rounded px-3 py-2 bg-white" name="anejamiento" value={form.anejamiento} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
@@ -148,10 +148,6 @@ export default function WineForm({ mode = 'create' }) {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Total</span>
           <input className="border rounded px-3 py-2 bg-white" name="total" value={form.total} onChange={handleChange} type="number" />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-sm text-gray-700">Stock Real</span>
-          <input className="border rounded px-3 py-2 bg-white" name="stockReal" value={form.stockReal} onChange={handleChange} type="number" />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Costo</span>

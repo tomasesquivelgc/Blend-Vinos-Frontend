@@ -38,7 +38,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="mb-2 border-b border-gray-200 pb-3 px-4">
+    <nav className="mb-2 border-b border-gray-200 p-6">
       <div className="flex items-center justify-center relative">
         <button
           className="absolute left-0 md:hidden inline-flex items-center justify-center rounded p-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
@@ -63,14 +63,22 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className={`mt-3 flex-col gap-3 md:mt-3 md:flex md:flex-row md:items-center md:gap-4 ${menuOpen ? 'flex' : 'hidden'}`}>
+      <div
+        className={`
+          ${menuOpen ? 'mt-3' : 'mt-0'}
+          flex flex-col gap-3
+          overflow-hidden transition-all duration-300 ease-out
+          ${menuOpen ? 'max-h-[600px] opacity-100 translate-y-0 pointer-events-auto' : 'max-h-0 opacity-0 -translate-y-2 pointer-events-none'}
+          md:mt-3 md:flex md:flex-row md:items-center md:gap-3 md:max-h-none md:opacity-100 md:translate-y-0 md:overflow-visible md:pointer-events-auto
+        `}
+      >
         <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-auto">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar en inventario..."
-            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-64 bg-white"
+            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-48 lg:w-64 bg-white"
             aria-label="Search"
           />
           <button
