@@ -106,7 +106,7 @@ export default function Movimientos() {
         <div>
           <label className="block mb-1">Vino</label>
           <select
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white"
             value={wineId}
             onChange={(e) => setWineId(e.target.value)}
             required
@@ -123,7 +123,7 @@ export default function Movimientos() {
           <input
             type="number"
             min={1}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white"
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             required
@@ -133,7 +133,7 @@ export default function Movimientos() {
         <div>
           <label className="block mb-1">Comentario</label>
           <textarea
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white"
             rows={3}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -144,7 +144,7 @@ export default function Movimientos() {
         <div>
           <label className="block mb-1">Cliente (opcional)</label>
           <select
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-white"
             value={clientId}
             onChange={(e) => setClientId(e.target.value)}
           >
@@ -159,7 +159,7 @@ export default function Movimientos() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="px-4 py-2 bg-black text-white rounded disabled:opacity-50"
+            className="px-4 py-2 bg-blend-purple text-white rounded disabled:opacity-50"
           >
             Guardar Movimiento
           </button>

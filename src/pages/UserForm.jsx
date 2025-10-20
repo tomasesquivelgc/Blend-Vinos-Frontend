@@ -75,7 +75,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Nombre</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="name" 
             value={form.name} 
             onChange={handleChange}
@@ -86,7 +86,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Email</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="email" 
             type="email"
             value={form.email} 
@@ -98,7 +98,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Username</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="username" 
             value={form.username} 
             onChange={handleChange}
@@ -109,7 +109,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Teléfono</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="phone" 
             value={form.phone} 
             onChange={handleChange}
@@ -119,7 +119,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Rol</span>
           <select 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="roleId" 
             value={form.roleId} 
             onChange={handleChange}
@@ -136,7 +136,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Contraseña</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="password" 
             type="password"
             value={form.password} 
@@ -148,7 +148,7 @@ export default function UserForm() {
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Repita su contraseña</span>
           <input 
-            className="border rounded px-3 py-2" 
+            className="border rounded px-3 py-2 bg-white" 
             name="confirmPassword" 
             type="password"
             value={form.confirmPassword} 
@@ -160,7 +160,7 @@ export default function UserForm() {
         <div className="md:col-span-2 flex items-center gap-2 mt-2">
           <button 
             type="submit" 
-            className="px-4 py-2 bg-black text-white rounded" 
+            className="px-4 py-2 bg-blend-purple text-white rounded" 
             disabled={loading}
           >
             Crear Usuario

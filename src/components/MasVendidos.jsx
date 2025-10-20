@@ -71,7 +71,7 @@ export default function MasVendidos() {
                   Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
                 </p>
               </div>
-              <p className="text-sm text-green-600 font-semibold mt-2">
+              <p className="text-sm text-blend-green font-semibold mt-2">
               Total dinero: ${Number(item.total_dinero).toFixed(2)}
               </p>
             </div>

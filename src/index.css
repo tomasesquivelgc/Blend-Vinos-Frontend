@@ -6,7 +6,9 @@
   --color-blend-text-purple: #572d88;
   --color-blend-yellow: #ffffe5;
   --color-blend-pink: #ec58a2;
+  --color-blend-pink-dark: #C84C8A;
   --color-blend-yellow-dark: #c5c5ab;
+  --color-blend-green: #00500b;
 }
 
 .bg-blend-yellow-gradient {

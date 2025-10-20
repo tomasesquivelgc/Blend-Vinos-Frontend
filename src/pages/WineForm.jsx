@@ -115,51 +115,51 @@ export default function WineForm({ mode = 'create' }) {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3 md:grid-cols-2 max-w-4xl">
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Código de Barras</span>
-          <input className="border rounded px-3 py-2" name="codigoDeBarras" value={form.codigoDeBarras} onChange={handleChange} type="number" />
+          <input className="border rounded px-3 py-2 bg-white" name="codigoDeBarras" value={form.codigoDeBarras} onChange={handleChange} type="number" />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Código</span>
-          <input className="border rounded px-3 py-2" name="codigo" value={form.codigo} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="codigo" value={form.codigo} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Nombre</span>
-          <input className="border rounded px-3 py-2" name="nombre" value={form.nombre} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="nombre" value={form.nombre} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Cepa</span>
-          <input className="border rounded px-3 py-2" name="cepa" value={form.cepa} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="cepa" value={form.cepa} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Anejamiento</span>
-          <input className="border rounded px-3 py-2" name="anejamiento" value={form.anejamiento} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="anejamiento" value={form.anejamiento} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Bodega</span>
-          <input className="border rounded px-3 py-2" name="bodega" value={form.bodega} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="bodega" value={form.bodega} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Distribuidor</span>
-          <input className="border rounded px-3 py-2" name="distribuidor" value={form.distribuidor} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="distribuidor" value={form.distribuidor} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Estilo</span>
-          <input className="border rounded px-3 py-2" name="estilo" value={form.estilo} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="estilo" value={form.estilo} onChange={handleChange} />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Total</span>
-          <input className="border rounded px-3 py-2" name="total" value={form.total} onChange={handleChange} type="number" />
+          <input className="border rounded px-3 py-2 bg-white" name="total" value={form.total} onChange={handleChange} type="number" />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Stock Real</span>
-          <input className="border rounded px-3 py-2" name="stockReal" value={form.stockReal} onChange={handleChange} type="number" />
+          <input className="border rounded px-3 py-2 bg-white" name="stockReal" value={form.stockReal} onChange={handleChange} type="number" />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Costo</span>
-          <input className="border rounded px-3 py-2" name="costo" value={form.costo} onChange={handleChange} type="number" step="0.01" />
+          <input className="border rounded px-3 py-2 bg-white" name="costo" value={form.costo} onChange={handleChange} type="number" step="0.01" />
         </label>
 
         <div className="md:col-span-2 flex items-center gap-2 mt-2">
-          <button type="submit" className="px-4 py-2 bg-black text-white rounded" disabled={loading}>
+          <button type="submit" className="px-4 py-2 bg-blend-purple text-white rounded" disabled={loading}>
             {mode === 'create' ? 'Crear' : 'Guardar cambios'}
           </button>
           <button type="button" className="px-4 py-2 border rounded" onClick={() => navigate(-1)} disabled={loading}>Cancelar</button>

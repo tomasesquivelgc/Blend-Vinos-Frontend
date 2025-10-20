@@ -72,7 +72,7 @@ export default function Inventario() {
           <label className="flex items-center gap-2">
             <span className="text-sm text-gray-700">Ordenar por</span>
             <select
-              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blend-purple focus:outline-none  bg-white"
               value={orderBy}
               onChange={(e) => setOrderBy(e.target.value)}
             >
@@ -89,7 +89,7 @@ export default function Inventario() {
           <label className="flex items-center gap-2">
             <span className="text-sm text-gray-700">Orden</span>
             <select
-              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+              className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blend-purple focus:outline-none bg-white"
               value={order}
               onChange={(e) => setOrder(e.target.value)}
             >

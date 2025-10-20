@@ -120,7 +120,7 @@ export default function Configuraciones() {
                   name={field}
                   value={formData[field] || ""}
                   onChange={handleChange}
-                  className="mt-1 border rounded px-2 py-1 w-64"
+                  className="mt-1 border rounded px-2 py-1 w-64  bg-white"
                 />
               ) : (
                 <p className="font-medium">{user[field]}</p>
@@ -131,7 +131,7 @@ export default function Configuraciones() {
               <button
                 onClick={() => handleSave(field)}
                 disabled={loading}
-                className="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                className="text-sm bg-blend-pink hover:bg-blend-pink-dark text-white px-3 py-1 rounded"
               >
                 {loading ? "Guardando..." : "Guardar"}
               </button>
@@ -156,7 +156,7 @@ export default function Configuraciones() {
             placeholder="Nueva contraseña"
             value={passwordData.contrasena}
             onChange={handlePasswordChange}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 bg-white"
           />
           <input
             type="password"
@@ -164,7 +164,7 @@ export default function Configuraciones() {
             placeholder="Confirmar contraseña"
             value={passwordData.confirmContrasena}
             onChange={handlePasswordChange}
-            className="border rounded px-2 py-1"
+            className="border rounded px-2 py-1 bg-white"
           />
           <button
             onClick={handlePasswordUpdate}
