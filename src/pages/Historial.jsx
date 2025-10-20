@@ -85,21 +85,51 @@ export default function Historial() {
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (
-        <div className="space-y-2">
+        <div className="">
           {data.length === 0 && <p>No hay movimientos para este mes.</p>}
-          {data.map(item => (
-            <div key={item.id} className="border rounded p-3 flex items-center justify-between bg-white">
-              <div className="space-y-1">
-                <div className="text-sm text-gray-600">{item.fecha ? new Date(item.fecha).toLocaleString() : ''}</div>
-                <div className="font-medium">{item.vino_nombre || `Vino #${item.vino_id}`}</div>
-                <div className="text-sm">Tipo: {item.accion}</div>
-                {item.comentario ? <div className="text-sm text-gray-700">{item.comentario}</div> : null}
-                {item.cliente_id != null ? (
-                  <div className="text-sm text-gray-700">Cliente: #{item.cliente_id}</div>
-                ) : null}
+          {console.log(data)}
+          {data.map((item) => (
+            <div
+              key={item.id}
+              className="border p-3 bg-white grid grid-cols-1 md:grid-cols-7 items-center"
+            >
+              {/* Fecha */}
+              <div className="text-sm text-gray-600">
+                {item.fecha ? new Date(item.fecha).toLocaleString() : 'Sin fecha'}
               </div>
-              <div className={`text-lg font-semibold ${item.accion === 'VENTA' ? 'text-green-700' : 'text-blue-700'}`}>
-                {item.cantidad}
+
+              {/* Vino */}
+              <div className="font-medium">
+                {item.vino_nombre || (item.vino_id ? `Vino #${item.vino_id}` : 'Sin vino')}
+              </div>
+
+              {/* Tipo */}
+              <div className="text-sm">
+                {item.accion ? `Tipo: ${item.accion}` : 'Sin tipo'}
+              </div>
+
+              {/* Comentario */}
+              <div className="text-sm text-gray-700 truncate">
+                {item.comentario && item.comentario.trim().length > 0 ? item.comentario : 'Sin comentario'}
+              </div>
+
+              {/* Cliente */}
+              <div className="text-sm text-gray-700">
+                {item.cliente_id != null ? `Cliente: #${item.cliente_id}` : 'Sin cliente'}
+              </div>
+
+              {/* Cantidad */}
+              <div
+                className={`text-lg font-semibold text-right md:text-left ${
+                  item.accion === 'VENTA' ? 'text-green-700' : item.accion ? 'text-blue-700' : 'text-gray-700'
+                }`}
+              >
+                {item.cantidad ?? '—'}
+              </div>
+
+              {/* Precio */}
+              <div className="text-sm text-gray-700">
+                {item.costo ? `$${item.costo}` : 'Sin precio'}
               </div>
             </div>
           ))}

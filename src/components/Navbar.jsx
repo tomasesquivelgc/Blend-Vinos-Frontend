@@ -29,7 +29,7 @@ export default function Navbar() {
       } else {
         navigate(`/inventario?q=${encodeURIComponent(query)}`)
       }
-    } catch (err) {
+    } catch {
       navigate(`/inventario?q=${encodeURIComponent(query)}`)
     } finally {
       setSearching(false)

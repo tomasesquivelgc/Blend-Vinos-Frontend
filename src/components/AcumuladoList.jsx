@@ -34,7 +34,7 @@ export default function AcumuladoList() {
       {loading && <div className="text-gray-600">Cargando lista...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
       {!loading && !error && (
-        <ul className="divide-y divide-gray-200 rounded border border-gray-200 bg-white">
+        <ul className="divide-y divide-gray-200 border border-gray-100 bg-white">
           {items.map((w) => (
             <li key={w.id || w._id || w.codigo} className="p-4 bg-white h-[120px]">
               <div className="text-lg font-semibold">{w.nombre || w.name || 'Sin nombre'}</div>
