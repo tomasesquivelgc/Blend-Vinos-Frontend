@@ -59,7 +59,7 @@ export default function MasVendidos() {
             key={index}
             className="bg-white p-4 border border-gray-100 h-[120px]"
           >
-            <h3 className="text-lg font-bold text-gray-800 capitalize">
+            <h3 className="text-lg font-semibold">
               {item.vino_nombre}
             </h3>
             <div className='flex justify-between'>

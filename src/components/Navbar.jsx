@@ -38,7 +38,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="mb-6 border-b border-gray-200 pb-3 px-4">
+    <nav className="mb-2 border-b border-gray-200 pb-3 px-4">
       <div className="flex items-center justify-center relative">
         <button
           className="absolute left-0 md:hidden inline-flex items-center justify-center rounded p-2 text-gray-700 hover:bg-gray-100 focus:outline-none"

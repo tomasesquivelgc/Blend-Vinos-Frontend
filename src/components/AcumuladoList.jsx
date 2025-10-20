@@ -30,12 +30,6 @@ export default function AcumuladoList() {
         <div className="flex-1 text-center">
           <h3 className="text-xl font-semibold">Acumulado</h3>
         </div>
-        <Link
-          to="/inventario"
-          className="text-sm text-blend-purple hover:underline"
-        >
-          Ver inventario
-        </Link>
       </div>
       {loading && <div className="text-gray-600">Cargando lista...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
@@ -43,11 +37,9 @@ export default function AcumuladoList() {
         <ul className="divide-y divide-gray-200 rounded border border-gray-200 bg-white">
           {items.map((w) => (
             <li key={w.id || w._id || w.codigo} className="p-4 bg-white h-[120px]">
-                                <div className="font-medium">{w.nombre || w.name || 'Sin nombre'}</div>
+              <div className="text-lg font-semibold">{w.nombre || w.name || 'Sin nombre'}</div>
               <div className="flex justify-between h-full">
-                
                 <div>
-
                   <div className="text-sm text-gray-700">{w.codigo || w.varietal || ''}</div>
                 </div>
                 <div>

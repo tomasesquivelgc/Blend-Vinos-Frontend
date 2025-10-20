@@ -83,14 +83,14 @@ export default function Movimientos() {
         <div className="flex gap-2">
           <button
             type="button"
-            className={`px-4 py-2 rounded ${type === 'COMPRA' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded ${type === 'COMPRA' ? 'bg-blend-pink text-white' : 'bg-gray-200'}`}
             onClick={() => setType('COMPRA')}
           >
             COMPRA
           </button>
           <button
             type="button"
-            className={`px-4 py-2 rounded ${type === 'VENTA' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
+            className={`px-4 py-2 rounded ${type === 'VENTA' ? 'bg-blend-pink text-white' : 'bg-gray-200'}`}
             onClick={() => setType('VENTA')}
           >
             VENTA
