@@ -42,10 +42,12 @@ export default function AcumuladoList() {
       {!loading && !error && (
         <ul className="divide-y divide-gray-200 rounded border border-gray-200 bg-white">
           {items.map((w) => (
-            <li key={w.id || w._id || w.codigo} className="p-3 bg-white">
-              <div className="flex items-center justify-between">
+            <li key={w.id || w._id || w.codigo} className="p-4 bg-white h-[120px]">
+                                <div className="font-medium">{w.nombre || w.name || 'Sin nombre'}</div>
+              <div className="flex justify-between h-full">
+                
                 <div>
-                  <div className="font-medium">{w.nombre || w.name || 'Sin nombre'}</div>
+
                   <div className="text-sm text-gray-700">{w.codigo || w.varietal || ''}</div>
                 </div>
                 <div>

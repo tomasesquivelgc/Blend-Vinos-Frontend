@@ -57,20 +57,26 @@ export default function MasVendidos() {
         {data.map((item, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md p-4 border border-gray-100 hover:shadow-lg transition-shadow"
+            className="bg-white p-4 border border-gray-100 h-[120px]"
           >
-            <h3 className="text-lg font-bold text-gray-800 mb-2 capitalize">
+            <h3 className="text-lg font-bold text-gray-800 capitalize">
               {item.vino_nombre}
             </h3>
-            <p className="text-sm text-gray-600">
-              Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
-            </p>
-            <p className="text-sm text-green-600 font-semibold mt-2">
+            <div className='flex justify-between'>
+              <div>
+                <p className="text-sm text-gray-600">
+                  Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
+                </p>
+                <p className="text-sm text-gray-600">
+                  Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
+                </p>
+              </div>
+              <p className="text-sm text-green-600 font-semibold mt-2">
               Total dinero: ${Number(item.total_dinero).toFixed(2)}
-            </p>
+              </p>
+            </div>
+            
+            
           </div>
         ))}
       </div>

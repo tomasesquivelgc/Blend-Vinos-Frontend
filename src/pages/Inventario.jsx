@@ -103,30 +103,21 @@ export default function Inventario() {
             <button className="rounded bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer px-3 py-2 text-white" onClick={handleCreate}>Crear nuevo vino</button>
           </div>
         )}
-        {q && (
-          <div className="text-sm text-gray-600">
-            Mostrando resultados para: <span className="font-medium">{q}</span>
-            <button className="ml-2 text-blue-600 hover:underline" onClick={handleClearSearch}>Limpiar</button>
-          </div>
-        )}
       </div>
+      
 
       {loading && <div className="text-gray-600">Cargando vinos...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
 
       {!loading && !error && (
         <>
-          {Array.isArray(filteredWines) && filteredWines.length > 1 && (
-            <div className="text-sm text-gray-600 mb-2">
-              Se encontraron {filteredWines.length} resultados para: <span className="font-medium">{q}</span>
-            </div>
-          )}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredWines.map((wine) => (
               <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-white">
                 <div className="mb-1 flex items-start justify-between">
                   <div>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
+                    <div className="text-sm text-gray-600">{wine.codigo || 'Codigo desconocido'}</div>
                     <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
                     <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
                     <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>

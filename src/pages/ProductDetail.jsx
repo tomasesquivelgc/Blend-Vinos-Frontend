@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { fetchWineByCode } from '../lib/api.js'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
+import { fetchWineByCode, deleteWine } from '../lib/api.js'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function ProductDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const location = useLocation()
   const initialWine = location.state?.wine
   const initialCode = location.state?.code
@@ -29,21 +31,50 @@ export default function ProductDetail() {
     return () => abort.abort()
   }, [id, initialCode])
 
+  const { user } = useAuth()
+
+  const handleEdit = (id) => navigate(`/inventario/editar/${id}`)
+
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm('¿Seguro que deseas eliminar este vino? Esta acción no se puede deshacer.')
+    if (!confirmed) return
+    try {
+      await deleteWine(id)
+      navigate('/inventario')
+    } catch (e) {
+      alert(e.message || 'Error eliminando el vino')
+    }
+  }
+
+  const handleCreate = () => navigate('/inventario/nuevo')
+
   return (
     <div className="p-6">
       {loading && <div className="text-gray-600">Cargando vino...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
-      {!loading && !error && (
-        <div>
-          <h2 className="text-2xl font-semibold mb-2">{display.nombre || display.name || 'Sin nombre'}</h2>
-          <div className="text-gray-700">
-            <div><span className="font-medium">Código:</span> {display.codigo || display.code || id}</div>
-            <div><span className="font-medium">Cepa:</span> {display.cepa || display.varietal || 'Desconocida'}</div>
-            <div><span className="font-medium">Región:</span> {display.region || 'Desconocida'}</div>
-            <div><span className="font-medium">Costo:</span> {display.costo ?? display.cost ?? '-'}</div>
-            <div><span className="font-medium">Stock:</span> {display.stockreal ?? display.stock ?? '-'}</div>
+      {user?.rol_id === 1 && (
+          <div className='flex justify-end mb-4'>
+            <button className="rounded bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer px-3 py-2 text-white" onClick={handleCreate}>Crear nuevo vino</button>
           </div>
-        </div>
+        )}
+      {!loading && !error && (
+        <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-white">
+                <div className="mb-1 flex items-start justify-between">
+                  <div>
+                    <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
+                    <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
+                    <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
+                    <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>
+                    <div className="text-sm text-gray-600">Precio Recomendado de venta: {wine.precioRecomendado ?? '-'}</div>
+                  </div>
+                  {user?.rol_id === 1 && (
+                    <div className="flex gap-2">
+                      <button className="rounded border px-2 py-1 text-sm text-blend-purple" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                      <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                    </div>
+                  )}
+                </div>
+              </div>
       )}
     </div>
   )
