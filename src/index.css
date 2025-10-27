@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blend-purple: #550b9e;
+  --color-blend-purple-dark: #44097e;
+  --color-blend-text-purple: #572d88;
+  --color-blend-yellow: #ffffe5;
+  --color-blend-pink: #ec58a2;
+  --color-blend-pink-dark: #C84C8A;
+  --color-blend-yellow-dark: #c5c5ab;
+  --color-blend-green: #00500b;
+}
+
+.bg-blend-yellow-gradient {
+  background: radial-gradient(
+    circle,
+    var(--color-blend-yellow) 80%,  /* center: mostly yellow */
+    var(--color-blend-yellow-dark) 100% /* outer edge: thin dark ring */
+  );
+}
