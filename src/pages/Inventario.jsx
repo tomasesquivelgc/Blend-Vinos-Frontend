@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { fetchPaginatedWines, fetchWineByCode, deleteWine } from '../lib/api.js'
+import { fetchPaginatedWines, deleteWine } from '../lib/api.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Inventario() {
@@ -10,8 +10,8 @@ export default function Inventario() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [noResultsMessage, setNoResultsMessage] = useState('')
-  const [page] = useState(0)
-  const [limit] = useState(50)
+  const [page, setPage] = useState(0)
+  const [limit] = useState(12)
   const [orderBy, setOrderBy] = useState('total')
   const [order, setOrder] = useState('DESC')
   const { user } = useAuth()
@@ -27,15 +27,12 @@ export default function Inventario() {
 
     async function load() {
       try {
-        if (q) {
-          // When query is present, ask backend for matches (by name contains or code match)
-          const data = await fetchWineByCode(q, { signal: abortController.signal })
-          const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
-          setWines(list)
-        } else {
-          const data = await fetchPaginatedWines({ page, limit, order, orderBy, signal: abortController.signal })
-          const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
-          setWines(list)
+        // Use paginated endpoint for both normal listing and searches (backend should support `q` param)
+        const data = await fetchPaginatedWines({ page, limit, order, orderBy, q, signal: abortController.signal })
+        const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
+        setWines(list)
+        if (q && list.length === 0) {
+          setNoResultsMessage('ningun vino encontrado con ese nombre')
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
@@ -58,6 +55,11 @@ export default function Inventario() {
 
     return () => abortController.abort()
   }, [location.key, page, limit, order, orderBy, q])
+
+  // Reset to first page when the search query changes
+  useEffect(() => {
+    setPage(0)
+  }, [q])
 
   // We no longer filter client-side — the API returns matching wines when `q` is set.
   const filteredWines = useMemo(() => wines, [wines])
@@ -149,6 +151,29 @@ export default function Inventario() {
               </div>
             ))}
             {filteredWines.length === 0 && <div className="text-gray-600">{noResultsMessage || 'No se encontraron vinos.'}</div>}
+          </div>
+
+          {/* Pagination controls */}
+          <div className="mt-4 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              className={`px-3 py-1 rounded border ${page === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              ← Anterior
+            </button>
+
+            <span className="text-sm text-gray-600">Página {page + 1}</span>
+
+            <button
+              type="button"
+              className={`px-3 py-1 rounded border ${(wines.length < limit) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              onClick={() => setPage((p) => p + 1)}
+              disabled={wines.length < limit}
+            >
+              Siguiente →
+            </button>
           </div>
         </>
       )}
