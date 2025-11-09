@@ -77,7 +77,7 @@ export default function Users() {
         <div className="space-y-2">
           {users.length === 0 && <p>No hay usuarios.</p>}
           {users.map(user => (
-            <div key={user.id} className="border rounded p-4 flex items-center justify-between bg-white">
+            <div key={user.id} className="border rounded p-4 flex flex-col md:flex-row md:items-center justify-between bg-white">
               <div className="space-y-1">
                 <div className="font-semibold text-lg">{user.name || user.username || 'Sin nombre'}</div>
                 <div className="text-sm text-gray-600">{user.email}</div>
@@ -85,7 +85,7 @@ export default function Users() {
                 <div className="text-sm text-gray-600">Username: {user.username}</div>
                 {user.phone && <div className="text-sm text-gray-600">Tel: {user.phone}</div>}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col md:flex-row md:items-center gap-2">
                 <div className="text-sm text-gray-500">
                   ID: {user.id}
                 </div>
