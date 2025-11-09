@@ -115,7 +115,7 @@ export default function Historial() {
 
               {/* Cliente */}
               <div className="text-sm text-gray-700">
-                {item.cliente_id != null ? `Cliente: #${item.cliente_id}` : 'Sin cliente'}
+                {item.nombre_de_cliente != null ? `Cliente: ${item.nombre_de_cliente}` : 'Sin cliente'}
               </div>
 
               {/* Cantidad */}

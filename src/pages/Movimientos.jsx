@@ -55,12 +55,16 @@ export default function Movimientos() {
     setSuccess('')
     try {
       const normalizedComment = (comment || '').trim() === '' ? null : comment
+      // Find the selected client and extract a display name (name|username|email)
+      const selectedClient = users.find(u => String(u.id) === String(clientId))
+      const clientName = selectedClient ? (selectedClient.name || selectedClient.username || selectedClient.email) : null
       const payload = {
         wine_id: Number(wineId),
         type,
         quantity: Number(quantity),
         comment: normalizedComment,
         client_id: clientId ? Number(clientId) : null,
+        nombre_de_cliente: clientName,
       }
       await createMovement(payload)
       setSuccess('Movimiento creado correctamente')
