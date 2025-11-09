@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { fetchPaginatedWines, deleteWine } from '../lib/api.js'
+import { fetchPaginatedWines, fetchWineByCode, deleteWine } from '../lib/api.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
 export default function Inventario() {
@@ -9,6 +9,7 @@ export default function Inventario() {
   const [wines, setWines] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [noResultsMessage, setNoResultsMessage] = useState('')
   const [page] = useState(0)
   const [limit] = useState(50)
   const [orderBy, setOrderBy] = useState('total')
@@ -20,31 +21,46 @@ export default function Inventario() {
 
   useEffect(() => {
     const abortController = new AbortController()
-    setLoading(true)
-    setError(null)
+  setLoading(true)
+  setError(null)
+  setNoResultsMessage('')
 
-    fetchPaginatedWines({ page, limit, order, orderBy, signal: abortController.signal })
-      .then((data) => {
-        const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
-        setWines(list)
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setError(err.message || 'Failed to load wines')
-      })
-      .finally(() => setLoading(false))
+    async function load() {
+      try {
+        if (q) {
+          // When query is present, ask backend for matches (by name contains or code match)
+          const data = await fetchWineByCode(q, { signal: abortController.signal })
+          const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
+          setWines(list)
+        } else {
+          const data = await fetchPaginatedWines({ page, limit, order, orderBy, signal: abortController.signal })
+          const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
+          setWines(list)
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          // If we searched (q) and the backend returned 404 / Not Found,
+          // show a friendly message instead of the technical error.
+          const msg = String(err?.message || '').toLowerCase()
+          if (q && (msg.includes('404') || msg.includes('not found') || msg.includes('no se encontro') || msg.includes('notfound'))) {
+            setWines([])
+            setNoResultsMessage('ningun vino encontrado con ese nombre')
+          } else {
+            setError(err.message || 'Failed to load wines')
+          }
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    load()
 
     return () => abortController.abort()
-  }, [location.key, page, limit, order, orderBy])
+  }, [location.key, page, limit, order, orderBy, q])
 
-  const filteredWines = useMemo(() => {
-    if (!q) return wines
-    const lower = q.toLowerCase()
-    return wines.filter((w) =>
-      String(w.nombre || '').toLowerCase().includes(lower) ||
-      String(w.cepa || '').toLowerCase().includes(lower) ||
-      String(w.region || '').toLowerCase().includes(lower)
-    )
-  }, [wines, q])
+  // We no longer filter client-side — the API returns matching wines when `q` is set.
+  const filteredWines = useMemo(() => wines, [wines])
 
   const handleClearSearch = () => {
     queryParams.delete('q')
@@ -132,7 +148,7 @@ export default function Inventario() {
                 </div>
               </div>
             ))}
-            {filteredWines.length === 0 && <div className="text-gray-600">No se encontraron vinos.</div>}
+            {filteredWines.length === 0 && <div className="text-gray-600">{noResultsMessage || 'No se encontraron vinos.'}</div>}
           </div>
         </>
       )}
