@@ -2,7 +2,6 @@ import { useState, useRef } from 'react'
 import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { fetchWineByCode } from '../lib/api.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
-import blendLogo from '../assets/blend-logo.png'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -58,7 +57,7 @@ export default function Navbar() {
         </button>
         <Link to="/" className="block">
           <img
-            src={blendLogo}
+            src="/blend-logo.png"
             alt="blend logo"
             className="h-32 w-auto max-w-[240px] object-contain mx-auto"
           />
