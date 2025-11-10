@@ -9,8 +9,9 @@ export default function Inventario() {
   const [wines, setWines] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [page] = useState(0)
-  const [limit] = useState(50)
+  const [noResultsMessage, setNoResultsMessage] = useState('')
+  const [page, setPage] = useState(0)
+  const [limit] = useState(12)
   const [orderBy, setOrderBy] = useState('total')
   const [order, setOrder] = useState('DESC')
   const { user } = useAuth()
@@ -20,31 +21,48 @@ export default function Inventario() {
 
   useEffect(() => {
     const abortController = new AbortController()
-    setLoading(true)
-    setError(null)
+  setLoading(true)
+  setError(null)
+  setNoResultsMessage('')
 
-    fetchPaginatedWines({ page, limit, order, orderBy, signal: abortController.signal })
-      .then((data) => {
+    async function load() {
+      try {
+        // Use paginated endpoint for both normal listing and searches (backend should support `q` param)
+        const data = await fetchPaginatedWines({ page, limit, order, orderBy, q, signal: abortController.signal })
         const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
         setWines(list)
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setError(err.message || 'Failed to load wines')
-      })
-      .finally(() => setLoading(false))
+        if (q && list.length === 0) {
+          setNoResultsMessage('ningun vino encontrado con ese nombre')
+        }
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          // If we searched (q) and the backend returned 404 / Not Found,
+          // show a friendly message instead of the technical error.
+          const msg = String(err?.message || '').toLowerCase()
+          if (q && (msg.includes('404') || msg.includes('not found') || msg.includes('no se encontro') || msg.includes('notfound'))) {
+            setWines([])
+            setNoResultsMessage('ningun vino encontrado con ese nombre')
+          } else {
+            setError(err.message || 'Failed to load wines')
+          }
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    load()
 
     return () => abortController.abort()
-  }, [location.key, page, limit, order, orderBy])
+  }, [location.key, page, limit, order, orderBy, q])
 
-  const filteredWines = useMemo(() => {
-    if (!q) return wines
-    const lower = q.toLowerCase()
-    return wines.filter((w) =>
-      String(w.nombre || '').toLowerCase().includes(lower) ||
-      String(w.cepa || '').toLowerCase().includes(lower) ||
-      String(w.region || '').toLowerCase().includes(lower)
-    )
-  }, [wines, q])
+  // Reset to first page when the search query changes
+  useEffect(() => {
+    setPage(0)
+  }, [q])
+
+  // We no longer filter client-side — the API returns matching wines when `q` is set.
+  const filteredWines = useMemo(() => wines, [wines])
 
   const handleClearSearch = () => {
     queryParams.delete('q')
@@ -132,7 +150,30 @@ export default function Inventario() {
                 </div>
               </div>
             ))}
-            {filteredWines.length === 0 && <div className="text-gray-600">No se encontraron vinos.</div>}
+            {filteredWines.length === 0 && <div className="text-gray-600">{noResultsMessage || 'No se encontraron vinos.'}</div>}
+          </div>
+
+          {/* Pagination controls */}
+          <div className="mt-4 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              className={`px-3 py-1 rounded border ${page === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              ← Anterior
+            </button>
+
+            <span className="text-sm text-gray-600">Página {page + 1}</span>
+
+            <button
+              type="button"
+              className={`px-3 py-1 rounded border ${(wines.length < limit) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              onClick={() => setPage((p) => p + 1)}
+              disabled={wines.length < limit}
+            >
+              Siguiente →
+            </button>
           </div>
         </>
       )}

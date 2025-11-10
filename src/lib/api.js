@@ -82,7 +82,7 @@ export async function fetchWineByCode(code, { signal } = {}) {
   return await response.json()
 }
 
-export async function fetchPaginatedWines({ page = 0, limit = 5, order = 'DESC', orderBy = 'total', signal } = {}) {
+export async function fetchPaginatedWines({ page = 0, limit = 5, order = 'DESC', orderBy = 'total', q, signal } = {}) {
   const baseUrl = import.meta.env.VITE_API_BASE
   const token = getAuthToken()
 
@@ -94,6 +94,7 @@ export async function fetchPaginatedWines({ page = 0, limit = 5, order = 'DESC',
   url.searchParams.set('limit', String(limit))
   url.searchParams.set('order', order)
   url.searchParams.set('orderBy', orderBy)
+  if (q && String(q).trim().length > 0) url.searchParams.set('q', String(q).trim())
 
   const response = await fetch(url.toString(), {
     method: 'GET',

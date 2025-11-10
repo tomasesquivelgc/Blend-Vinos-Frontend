@@ -62,6 +62,7 @@ export default function ProductDetail() {
                 <div className="mb-1 flex items-start justify-between">
                   <div>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
+                    <div className="text-sm text-gray-600">{wine.codigo || 'Codigo desconocido'}</div>
                     <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
                     <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
                     <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>

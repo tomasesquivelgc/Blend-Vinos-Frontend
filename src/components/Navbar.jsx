@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { fetchWineByCode } from '../lib/api.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
@@ -7,6 +7,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [searching, setSearching] = useState(false)
+  const inputRef = useRef(null)
   const navigate = useNavigate()
   const { user, logout } = useAuth()  // ✅ get user here
 
@@ -73,14 +74,30 @@ export default function Navbar() {
         `}
       >
         <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-auto">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar en inventario..."
-            className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none md:w-48 lg:w-64 bg-white"
-            aria-label="Search"
-          />
+          <div className="relative w-full md:w-48 lg:w-64">
+            <input
+              ref={inputRef}
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar en inventario..."
+              className="w-full rounded border border-gray-400 px-3 py-2 text-sm focus:border-blend-purple focus:outline-none bg-white"
+              aria-label="Search"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('')
+                  inputRef.current?.focus()
+                }}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full w-8 h-8 text-lg text-gray-600 hover:bg-gray-100"
+              >
+                ×
+              </button>
+            )}
+          </div>
           <button
             type="submit"
             className="inline-flex items-center justify-center rounded bg-blend-purple px-3 py-2 text-sm font-medium text-white hover:bg-blend-purple-dark disabled:opacity-60 hover:cursor-pointer"
