@@ -90,13 +90,13 @@ export default function Users() {
                   ID: {user.id}
                 </div>
                 <button 
-                  className="rounded border px-2 py-1 text-sm text-blend-purple" 
+                  className="rounded border px-2 py-1 text-sm text-blend-purple hover:cursor-pointer" 
                   onClick={() => handleResetPassword(user.id)}
                 >
                   Resetear contraseña
                 </button>
                 <button 
-                  className="rounded border px-2 py-1 text-sm text-red-700" 
+                  className="rounded border px-2 py-1 text-sm text-red-700 hover:cursor-pointer" 
                   onClick={() => handleDelete(user.id)}
                 >
                   Borrar usuario

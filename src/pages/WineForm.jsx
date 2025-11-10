@@ -155,10 +155,10 @@ export default function WineForm({ mode = 'create' }) {
         </label>
 
         <div className="md:col-span-2 flex items-center gap-2 mt-2">
-          <button type="submit" className="px-4 py-2 bg-blend-purple text-white rounded" disabled={loading}>
+          <button type="submit" className="px-4 py-2 bg-blend-purple text-white rounded hover:cursor-pointer" disabled={loading}>
             {mode === 'create' ? 'Crear' : 'Guardar cambios'}
           </button>
-          <button type="button" className="px-4 py-2 border rounded" onClick={() => navigate(-1)} disabled={loading}>Cancelar</button>
+          <button type="button" className="px-4 py-2 border rounded hover:cursor-pointer" onClick={() => navigate(-1)} disabled={loading}>Cancelar</button>
         </div>
       </form>
     </div>
