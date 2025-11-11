@@ -82,7 +82,19 @@ export default function Login() {
 
           {error && (
             <div className="text-red-600 text-sm text-center">
-              {error}
+              {(() => {
+                try {
+                  // Extract JSON part if it exists
+                  const match = error.match(/{.*}/)
+                  if (match) {
+                    const parsed = JSON.parse(match[0])
+                    return parsed.message || 'Ocurrió un error'
+                  }
+                  return error
+                } catch {
+                  return 'Ocurrió un error inesperado'
+                }
+              })()}
             </div>
           )}
 

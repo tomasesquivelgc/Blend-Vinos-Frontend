@@ -80,13 +80,13 @@ export default function Users() {
             <div key={user.id} className="border rounded p-4 flex flex-col md:flex-row md:items-center justify-between bg-white">
               <div className="space-y-1">
                 <div className="font-semibold text-lg">{user.name || user.username || 'Sin nombre'}</div>
-                <div className="text-sm text-gray-600">{user.email}</div>
-                <div className="text-sm text-gray-600">Rol: {getRoleName(user.roleid || user.role_id)}</div>
-                <div className="text-sm text-gray-600">Username: {user.username}</div>
-                {user.phone && <div className="text-sm text-gray-600">Tel: {user.phone}</div>}
+                <div className="text-sm text-gray-700">{user.email}</div>
+                <div className="text-sm text-gray-700">Rol: {getRoleName(user.roleid || user.role_id)}</div>
+                <div className="text-sm text-gray-700">Username: {user.username}</div>
+                {user.phone && <div className="text-sm text-gray-700">Tel: {user.phone}</div>}
               </div>
               <div className="flex flex-col md:flex-row md:items-center gap-2">
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-700">
                   ID: {user.id}
                 </div>
                 <button 

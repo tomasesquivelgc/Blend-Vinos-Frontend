@@ -90,7 +90,7 @@ export default function Historial() {
           {data.map((item) => (
             <div
               key={item.id}
-              className="border p-3 bg-white grid grid-cols-1 md:grid-cols-7 items-center"
+              className="border border-gray-400 p-3 bg-white grid grid-cols-1 md:grid-cols-7 items-center"
             >
               {/* Fecha */}
               <div className="text-sm text-gray-600">
@@ -127,7 +127,7 @@ export default function Historial() {
               </div>
 
               {/* Precio */}
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 font-semibold">
                 {item.costo ? `$${item.costo}` : 'Sin precio'}
               </div>
             </div>
