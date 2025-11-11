@@ -24,7 +24,10 @@ export default function Navbar() {
       setSearching(true)
       const results = await fetchWineByCode(query) // always an array
 
-      if (Array.isArray(results) && results.length > 0) {
+      if (Array.isArray(results) && results.length === 1) {
+        const wine = results[0]
+        navigate(`/inventario/${wine.id || wine._id}`, { state: { wine, code: query } })
+      } else if (Array.isArray(results) && results.length > 1) {
         navigate('/inventario', { state: { searchResults: results, query } })
       } else {
         alert('No se encontraron resultados para la búsqueda.')

@@ -16,8 +16,16 @@ export default function ProductDetail() {
   const display = useMemo(() => wine || {}, [wine])
 
   useEffect(() => {
-    if (wine) return
+    if (location.state?.wine) {
+      // If wine is passed via state, update the wine and skip fetching
+      setWine(location.state.wine)
+      setLoading(false)
+      setError(null)
+      return
+    }
+
     if (!initialCode && !id) return
+
     const abort = new AbortController()
     setLoading(true)
     setError(null)
@@ -29,7 +37,7 @@ export default function ProductDetail() {
       })
       .finally(() => setLoading(false))
     return () => abort.abort()
-  }, [id, initialCode])
+  }, [id, initialCode, location.state])
 
   const { user } = useAuth()
 
