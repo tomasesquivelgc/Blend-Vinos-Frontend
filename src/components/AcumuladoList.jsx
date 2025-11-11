@@ -43,9 +43,9 @@ export default function AcumuladoList() {
                   <div className="text-sm text-gray-700">{w.codigo || w.varietal || ''}</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-700">Total: {w.total ?? '-'}</div>
-                  <div className="text-sm text-gray-700">Precio: {w.costo ?? '-'}</div>
-                  <div className="text-sm text-gray-700">Precio recomendado: {w.precioRecomendado ?? '-'}</div>
+                  <div className="text-sm text-gray-700">Total: <span className="font-semibold">{w.total ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio: <span className="font-semibold">${w.costo ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio recomendado: <span className="font-semibold">${w.precioRecomendado ?? '-'}</span></div>
                 </div>
                 
               </div>

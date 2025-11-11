@@ -64,11 +64,11 @@ export default function MasVendidos() {
             </h3>
             <div className='flex justify-between'>
               <div>
-                <p className="text-sm text-gray-600">
-                  Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
+                <p className="text-sm text-gray-700">
+                  Total botellas: <span className="font-semibold">{item.botellas_vendidas}</span>
                 </p>
-                <p className="text-sm text-gray-600">
-                  Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
+                <p className="text-sm text-gray-700">
+                  Veces vendido: <span className="font-semibold">{item.cantidad_ventas}</span>
                 </p>
               </div>
               <p className="text-sm text-blend-green font-semibold mt-2">

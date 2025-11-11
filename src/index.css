@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: 'Roboto', sans-serif;
   --color-blend-purple: #550b9e;
   --color-blend-purple-dark: #44097e;
   --color-blend-text-purple: #572d88;

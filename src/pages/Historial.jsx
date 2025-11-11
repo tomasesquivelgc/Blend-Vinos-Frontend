@@ -87,7 +87,6 @@ export default function Historial() {
       {!loading && !error && (
         <div className="">
           {data.length === 0 && <p>No hay movimientos para este mes.</p>}
-          {console.log(data)}
           {data.map((item) => (
             <div
               key={item.id}

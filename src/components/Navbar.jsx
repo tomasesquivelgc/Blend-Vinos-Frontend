@@ -70,7 +70,7 @@ export default function Navbar() {
           flex flex-col gap-3
           overflow-hidden transition-all duration-300 ease-out
           ${menuOpen ? 'max-h-[600px] opacity-100 translate-y-0 pointer-events-auto' : 'max-h-0 opacity-0 -translate-y-2 pointer-events-none'}
-          md:mt-3 md:flex md:flex-row md:items-center md:gap-3 md:max-h-none md:opacity-100 md:translate-y-0 md:overflow-visible md:pointer-events-auto
+          md:mt-3 md:flex md:flex-row md:items-center md:gap-3 items-start md:max-h-none md:opacity-100 md:translate-y-0 md:overflow-visible md:pointer-events-auto
         `}
       >
         <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-auto">
