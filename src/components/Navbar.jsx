@@ -24,14 +24,13 @@ export default function Navbar() {
       setSearching(true)
       const results = await fetchWineByCode(query) // always an array
 
-      if (Array.isArray(results) && results.length === 1) {
-        const wine = results[0]
-        navigate(`/inventario/${wine.id || wine._id}`, { state: { wine, code: query } })
+      if (Array.isArray(results) && results.length > 0) {
+        navigate('/inventario', { state: { searchResults: results, query } })
       } else {
-        navigate(`/inventario?q=${encodeURIComponent(query)}`)
+        alert('No se encontraron resultados para la búsqueda.')
       }
-    } catch {
-      navigate(`/inventario?q=${encodeURIComponent(query)}`)
+    } catch (error) {
+      alert('No se encontraron resultados para la búsqueda.')
     } finally {
       setSearching(false)
       setMenuOpen(false)

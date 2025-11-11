@@ -6,8 +6,8 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 export default function Inventario() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [wines, setWines] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [wines, setWines] = useState(location.state?.searchResults || [])
+  const [loading, setLoading] = useState(!location.state?.searchResults)
   const [error, setError] = useState(null)
   const [noResultsMessage, setNoResultsMessage] = useState('')
   const [page, setPage] = useState(0)
@@ -20,14 +20,22 @@ export default function Inventario() {
   const q = queryParams.get('q')?.trim() || ''
 
   useEffect(() => {
+    if (location.state?.searchResults) {
+      // If search results are passed via state, update wines and skip fetching
+      setWines(location.state.searchResults)
+      setLoading(false)
+      setError(null)
+      setNoResultsMessage('')
+      return
+    }
+
     const abortController = new AbortController()
-  setLoading(true)
-  setError(null)
-  setNoResultsMessage('')
+    setLoading(true)
+    setError(null)
+    setNoResultsMessage('')
 
     async function load() {
       try {
-        // Use paginated endpoint for both normal listing and searches (backend should support `q` param)
         const data = await fetchPaginatedWines({ page, limit, order, orderBy, q, signal: abortController.signal })
         const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
         setWines(list)
@@ -36,8 +44,6 @@ export default function Inventario() {
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          // If we searched (q) and the backend returned 404 / Not Found,
-          // show a friendly message instead of the technical error.
           const msg = String(err?.message || '').toLowerCase()
           if (q && (msg.includes('404') || msg.includes('not found') || msg.includes('no se encontro') || msg.includes('notfound'))) {
             setWines([])
@@ -54,7 +60,7 @@ export default function Inventario() {
     load()
 
     return () => abortController.abort()
-  }, [location.key, page, limit, order, orderBy, q])
+  }, [location.key, page, limit, order, orderBy, q, location.state])
 
   // Reset to first page when the search query changes
   useEffect(() => {
@@ -66,7 +72,7 @@ export default function Inventario() {
 
   const handleClearSearch = () => {
     queryParams.delete('q')
-    navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true })
+    navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true, state: null })
   }
 
   const handleCreate = () => navigate('/inventario/nuevo')
