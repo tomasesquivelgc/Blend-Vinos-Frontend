@@ -69,6 +69,12 @@ export default function WineForm({ mode = 'create' }) {
     setError('')
     setSuccess('')
     setLoading(true)
+
+    if (!form.codigoDeBarras || Number(form.codigoDeBarras) <= 0) {
+    setError('El código de barras es obligatorio')
+    return
+   }
+
     try {
       if (mode === 'create') {
         const payload = {}
@@ -115,11 +121,11 @@ export default function WineForm({ mode = 'create' }) {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3 md:grid-cols-2 max-w-4xl">
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Código de Barras</span>
-          <input className="border rounded px-3 py-2 bg-white" name="codigoDeBarras" value={form.codigoDeBarras} onChange={handleChange} type="number" />
+          <input className="border rounded px-3 py-2 bg-white" name="codigoDeBarras" value={form.codigoDeBarras} onChange={handleChange} type="number" required />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Código</span>
-          <input className="border rounded px-3 py-2 bg-white" name="codigo" value={form.codigo} onChange={handleChange} />
+          <input className="border rounded px-3 py-2 bg-white" name="codigo" value={form.codigo} onChange={handleChange} required />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-sm text-gray-700">Nombre</span>
