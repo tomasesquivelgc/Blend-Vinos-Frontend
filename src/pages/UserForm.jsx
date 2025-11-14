@@ -21,6 +21,7 @@ export default function UserForm() {
     { id: 1, name: 'Admin' },
     { id: 2, name: 'Socio' },
     { id: 3, name: 'Revendedor' },
+    { id: 4, name: 'Distribuidor' },
   ]
 
   function handleChange(e) {

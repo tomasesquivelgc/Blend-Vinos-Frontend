@@ -55,7 +55,7 @@ export default function Users() {
   }  
 
   const getRoleName = (roleId) => {
-    const roles = { 1: 'Admin', 2: 'Socio', 3: 'Revendedor' }
+    const roles = { 1: 'Admin', 2: 'Socio', 3: 'Revendedor', 4: 'Distribuidor' }
     return roles[roleId] || 'Desconocido'
   }
 
@@ -81,9 +81,9 @@ export default function Users() {
               <div className="space-y-1">
                 <div className="font-semibold text-lg">{user.name || user.username || 'Sin nombre'}</div>
                 <div className="text-sm text-gray-700">{user.email}</div>
-                <div className="text-sm text-gray-700">Rol: {getRoleName(user.roleid || user.role_id)}</div>
-                <div className="text-sm text-gray-700">Username: {user.username}</div>
-                {user.phone && <div className="text-sm text-gray-700">Tel: {user.phone}</div>}
+                <div className="text-sm text-gray-700">Rol: <span className='font-semibold'>{getRoleName(user.roleid || user.role_id)}</span></div>
+                <div className="text-sm text-gray-700">Username: <span className='font-semibold'>{user.username}</span></div>
+                {user.phone && <div className="text-sm text-gray-700">Tel: <span className='font-semibold'>{user.phone}</span></div>}
               </div>
               <div className="flex flex-col md:flex-row md:items-center gap-2">
                 <div className="text-sm text-gray-700">
