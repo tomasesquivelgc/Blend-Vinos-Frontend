@@ -74,6 +74,13 @@ export default function ProductDetail() {
                     <div className="text-sm text-gray-700">{wine.cepa || 'Cepa desconocida'}</div>
                     <div className="text-sm text-gray-700">Costo: <span className="font-semibold">${wine.costo}</span></div>
                     <div className="text-sm text-gray-700">Stock: <span className="font-semibold">{wine.total ?? wine.total}</span></div>
+                    {user?.rol_id === 1 &&
+                    <>
+                    <div className='text-sm text-gray-700'>Precio Socios: <span className='font-semibold'>${wine.precioSocio}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Distribuidor: <span className='font-semibold'>${wine.precioDistribuidor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor: <span className='font-semibold'>${wine.precioRevendedor}</span></div>
+                    </>
+                    }
                     <div className="text-sm text-gray-700">Precio Recomendado de venta: <span className="font-semibold">${wine.precioRecomendado ?? '-'}</span></div>
                   </div>
                   {user?.rol_id === 1 && (
