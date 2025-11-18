@@ -67,8 +67,8 @@ export default function ProductDetail() {
         )}
       {!loading && !error && (
         <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-white">
-                <div className="mb-1 flex items-start justify-between">
-                  <div>
+                <div className="mb-1 flex items-start justify-between flex-col gap-2 md:flex-row">
+                  <div className='md:w-3/4'>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
                     <div className="text-sm text-gray-700">{wine.codigo || 'Codigo desconocido'}</div>
                     <div className="text-sm text-gray-700">{wine.cepa || 'Cepa desconocida'}</div>
@@ -84,9 +84,9 @@ export default function ProductDetail() {
                     <div className="text-sm text-gray-700">Precio Recomendado de venta: <span className="font-semibold">${wine.precioRecomendado ?? '-'}</span></div>
                   </div>
                   {user?.rol_id === 1 && (
-                    <div className="flex gap-2">
-                      <button className="rounded border px-2 py-1 text-sm text-blend-purple hover:cursor-pointer" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
-                      <button className="rounded border px-2 py-1 text-sm text-red-700 hover:cursor-pointer" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                    <div className="flex gap-2 w-full md:flex-col md:w-1/4">
+                      <button className="rounded border px-2 py-1 text-sm text-blend-purple hover:cursor-pointer w-1/2 md:w-full" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                      <button className="rounded border px-2 py-1 text-sm text-red-700 hover:cursor-pointer w-1/2 md:w-full" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
                     </div>
                   )}
                 </div>
