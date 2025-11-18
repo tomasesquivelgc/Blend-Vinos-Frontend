@@ -67,6 +67,13 @@ export default function Inventario() {
     setPage(0)
   }, [q])
 
+  // Reset to first page when search results are provided via navigation state
+  useEffect(() => {
+    if (location.state?.searchResults) {
+      setPage(0)
+    }
+  }, [location.state?.searchResults])
+
   // We no longer filter client-side — the API returns matching wines when `q` is set.
   const filteredWines = useMemo(() => wines, [wines])
 
