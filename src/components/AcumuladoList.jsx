@@ -36,7 +36,7 @@ export default function AcumuladoList() {
       {!loading && !error && (
         <ul className="divide-y-2 divide-gray-400 border border-gray-400 bg-white">
           {items.map((w) => (
-            <li key={w.id || w._id || w.codigo} className="p-4 bg-white md:h-[120px]">
+            <li key={w.id || w._id || w.codigo} className="p-4 bg-white md:h-[140px]">
               <div className="text-lg font-semibold">{w.nombre || w.name || 'Sin nombre'}</div>
               <div className="flex flex-col md:flex-row justify-between h-fit">
                 <div>
@@ -48,6 +48,7 @@ export default function AcumuladoList() {
                   <div className="text-sm text-gray-700">Total: <span className="font-semibold">{w.total ?? '-'}</span></div>
                   <div className="text-sm text-gray-700">Precio: <span className="font-semibold">${w.costo ?? '-'}</span></div>
                   <div className="text-sm text-gray-700">Precio recomendado: <span className="font-semibold">${w.precioRecomendado ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio de Oferta: <span className="font-semibold">${w.precioOferta ?? '-'}</span></div>
                 </div>
                 
               </div>

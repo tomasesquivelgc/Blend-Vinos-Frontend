@@ -157,9 +157,11 @@ export default function Inventario() {
                     <div className='text-sm text-gray-700'>Precio Socios: <span className="font-semibold">${wine.precioSocio}</span></div>
                     <div className='text-sm text-gray-700'>Precio Distribuidor: <span className="font-semibold">${wine.precioDistribuidor}</span></div>
                     <div className='text-sm text-gray-700'>Precio Revendedor: <span className="font-semibold">${wine.precioRevendedor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor Socio: <span className="font-semibold">${wine.precioRevendedorSocio}</span></div>
                     </>
                     }
                     <div className="text-sm text-gray-700">Precio Recomendado de venta: <span className="font-semibold">${wine.precioRecomendado ?? '-'}</span></div>
+                    <div className="text-sm text-gray-700">Precio de Oferta: <span className="font-semibold">${wine.precioOferta ?? '-'}</span></div>
                   </div>
                   {user?.rol_id === 1 && (
                     <div className="flex gap-2 w-full">

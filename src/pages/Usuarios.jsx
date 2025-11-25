@@ -55,7 +55,7 @@ export default function Users() {
   }  
 
   const getRoleName = (roleId) => {
-    const roles = { 1: 'Admin', 2: 'Socio', 3: 'Revendedor', 4: 'Distribuidor' }
+    const roles = { 1: 'Admin', 2: 'Socio', 3: 'Revendedor', 4: 'Distribuidor', 5: 'Revendedor Socio' }
     return roles[roleId] || 'Desconocido'
   }
 

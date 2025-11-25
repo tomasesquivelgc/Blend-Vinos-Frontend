@@ -57,7 +57,7 @@ export default function MasVendidos() {
         {data.map((item, index) => (
           <div
             key={index}
-            className="bg-white p-4 border border-gray-400 h-[120px]"
+            className="bg-white p-4 border border-gray-400 h-[140px]"
           >
             <h3 className="text-lg font-semibold">
               {item.vino_nombre}
