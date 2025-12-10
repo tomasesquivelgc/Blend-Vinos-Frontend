@@ -5,6 +5,7 @@ export default function Historial() {
   const now = new Date()
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth() + 1) // JS months are 0-11
+  const [movementType, setMovementType] = useState('')
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -15,7 +16,7 @@ export default function Historial() {
       setLoading(true)
       setError('')
       try {
-        const result = await fetchMovementsByMonth({ year, month, signal: abortController.signal })
+        const result = await fetchMovementsByMonth({ year, month, movementType: movementType || undefined, signal: abortController.signal })
         setData(Array.isArray(result) ? result : result?.items ?? [])
       } catch (e) {
         if (e && (e.name === 'AbortError' || e.code === 20)) return
@@ -26,7 +27,7 @@ export default function Historial() {
     }
     load()
     return () => abortController.abort()
-  }, [year, month])
+  }, [year, month, movementType])
 
   function goPrevMonth() {
     if (month === 1) {
@@ -78,6 +79,22 @@ export default function Historial() {
               </button>
             )
           })()}
+          {/* Movement type filter */}
+          <label className="flex items-center gap-2">
+            <span className="text-sm text-gray-700">Tipo</span>
+            <select
+              className="rounded border border-gray-300 px-2 py-1 text-sm bg-white"
+              value={movementType}
+              onChange={(e) => setMovementType(e.target.value)}
+            >
+              <option value="">Todos</option>
+              <option value="COMPRA">COMPRA</option>
+              <option value="VENTA">VENTA</option>
+              <option value="CREAR">CREAR</option>
+              <option value="ACTUALIZAR">ACTUALIZAR</option>
+              <option value="ELIMINAR">ELIMINAR</option>
+            </select>
+          </label>
         </div>
       </div>
 

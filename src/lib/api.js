@@ -163,7 +163,7 @@ export async function createMovement(body, { signal } = {}) {
   return await response.json()
 }
 
-export async function fetchMovementsByMonth({ year, month, signal } = {}) {
+export async function fetchMovementsByMonth({ year, month, movementType, signal } = {}) {
   const baseUrl = import.meta.env.VITE_API_BASE
   const token = getAuthToken()
 
@@ -176,6 +176,9 @@ export async function fetchMovementsByMonth({ year, month, signal } = {}) {
   const url = new URL(`${baseUrl}/api/movements/by-month`)
   url.searchParams.set('year', String(year))
   url.searchParams.set('month', String(month))
+  if (movementType && String(movementType).trim().length > 0) {
+    url.searchParams.set('accion', String(movementType).trim())
+  }
 
   const response = await fetch(url.toString(), {
     method: 'GET',
