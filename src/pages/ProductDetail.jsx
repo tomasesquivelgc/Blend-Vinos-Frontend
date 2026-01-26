@@ -16,8 +16,16 @@ export default function ProductDetail() {
   const display = useMemo(() => wine || {}, [wine])
 
   useEffect(() => {
-    if (wine) return
+    if (location.state?.wine) {
+      // If wine is passed via state, update the wine and skip fetching
+      setWine(location.state.wine)
+      setLoading(false)
+      setError(null)
+      return
+    }
+
     if (!initialCode && !id) return
+
     const abort = new AbortController()
     setLoading(true)
     setError(null)
@@ -29,7 +37,7 @@ export default function ProductDetail() {
       })
       .finally(() => setLoading(false))
     return () => abort.abort()
-  }, [id, initialCode])
+  }, [id, initialCode, location.state])
 
   const { user } = useAuth()
 
@@ -59,19 +67,28 @@ export default function ProductDetail() {
         )}
       {!loading && !error && (
         <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-white">
-                <div className="mb-1 flex items-start justify-between">
-                  <div>
+                <div className="mb-1 flex items-start justify-between flex-col gap-2 md:flex-row">
+                  <div className='md:w-3/4'>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
-                    <div className="text-sm text-gray-600">{wine.codigo || 'Codigo desconocido'}</div>
-                    <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
-                    <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
-                    <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>
-                    <div className="text-sm text-gray-600">Precio Recomendado de venta: {wine.precioRecomendado ?? '-'}</div>
+                    <div className="text-sm text-gray-700">{wine.codigo || 'Codigo desconocido'}</div>
+                    <div className="text-sm text-gray-700">{wine.cepa || 'Cepa desconocida'}</div>
+                    <div className="text-sm text-gray-700">Costo: <span className="font-semibold">${wine.costo}</span></div>
+                    <div className="text-sm text-gray-700">Stock: <span className="font-semibold">{wine.total ?? wine.total}</span></div>
+                    {user?.rol_id === 1 &&
+                    <>
+                    <div className='text-sm text-gray-700'>Precio Socios: <span className='font-semibold'>${wine.precioSocio}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Distribuidor: <span className='font-semibold'>${wine.precioDistribuidor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor: <span className='font-semibold'>${wine.precioRevendedor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor Socio: <span className='font-semibold'>${wine.precioRevendedorSocio}</span></div>
+                    </>
+                    }
+                    <div className="text-sm text-gray-700">Precio Recomendado de venta: <span className="font-semibold">${wine.precioRecomendado ?? '-'}</span></div>
+                    <div className="text-sm text-gray-700">Precio de Oferta: <span className="font-semibold">${wine.precioOferta ?? '-'}</span></div>
                   </div>
                   {user?.rol_id === 1 && (
-                    <div className="flex gap-2">
-                      <button className="rounded border px-2 py-1 text-sm text-blend-purple" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
-                      <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                    <div className="flex gap-2 w-full md:flex-col md:w-1/4">
+                      <button className="rounded border px-2 py-1 text-sm text-blend-purple hover:cursor-pointer w-1/2 md:w-full" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                      <button className="rounded border px-2 py-1 text-sm text-red-700 hover:cursor-pointer w-1/2 md:w-full" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
                     </div>
                   )}
                 </div>

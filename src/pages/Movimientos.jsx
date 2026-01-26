@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { createMovement, fetchUsers, fetchWines } from '../lib/api.js'
+import { createMovement, fetchUsers } from '../lib/api.js'
 
 export default function Movimientos() {
   const navigate = useNavigate()
@@ -8,9 +8,8 @@ export default function Movimientos() {
   const initialType = (location.state && location.state.type) || 'COMPRA'
 
   const [type, setType] = useState(initialType)
-  const [wines, setWines] = useState([])
   const [users, setUsers] = useState([])
-  const [wineId, setWineId] = useState('')
+  const [wineCode, setWineCode] = useState('')
   const [clientId, setClientId] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [comment, setComment] = useState('')
@@ -25,11 +24,9 @@ export default function Movimientos() {
       setLoading(true)
       setError('')
       try {
-        const [winesData, usersData] = await Promise.all([
-          fetchWines({ signal: abortController.signal }),
+        const [usersData] = await Promise.all([
           fetchUsers({ signal: abortController.signal }),
         ])
-        setWines(Array.isArray(winesData) ? winesData : winesData?.items ?? [])
         setUsers(Array.isArray(usersData) ? usersData : usersData?.items ?? [])
       } catch (e) {
         // Ignore abort errors (e.g., React StrictMode triggers effect cleanup)
@@ -44,8 +41,8 @@ export default function Movimientos() {
   }, [])
 
   const canSubmit = useMemo(() => {
-    return !submitting && wineId && Number(quantity) > 0 && type
-  }, [submitting, wineId, quantity, type])
+    return !submitting && wineCode && Number(quantity) > 0 && type
+  }, [submitting, wineCode, quantity, type])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -59,7 +56,7 @@ export default function Movimientos() {
       const selectedClient = users.find(u => String(u.id) === String(clientId))
       const clientName = selectedClient ? (selectedClient.name || selectedClient.username || selectedClient.email) : null
       const payload = {
-        wine_id: Number(wineId),
+        wine_code: wineCode,
         type,
         quantity: Number(quantity),
         comment: normalizedComment,
@@ -69,7 +66,7 @@ export default function Movimientos() {
       await createMovement(payload)
       setSuccess('Movimiento creado correctamente')
       // Optional: navigate back home or clear form
-      setWineId('')
+      setWineCode('')
       setClientId('')
       setQuantity(1)
       setComment('')
@@ -108,18 +105,14 @@ export default function Movimientos() {
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
         <div>
-          <label className="block mb-1">Vino</label>
-          <select
+          <label className="block mb-1">Código de vino</label>
+          <input
+            type="text"
             className="w-full border rounded px-3 py-2 bg-white"
-            value={wineId}
-            onChange={(e) => setWineId(e.target.value)}
+            value={wineCode}
+            onChange={(e) => setWineCode(e.target.value)}
             required
-          >
-            <option value="">Selecciona un vino</option>
-            {wines.map(w => (
-              <option key={w.id} value={w.id}>{w.name || w.nombre || `#${w.id}`}</option>
-            ))}
-          </select>
+          />
         </div>
 
         <div>

@@ -27,11 +27,13 @@ export default function Navbar() {
       if (Array.isArray(results) && results.length === 1) {
         const wine = results[0]
         navigate(`/inventario/${wine.id || wine._id}`, { state: { wine, code: query } })
+      } else if (Array.isArray(results) && results.length > 1) {
+        navigate('/inventario', { state: { searchResults: results, query } })
       } else {
-        navigate(`/inventario?q=${encodeURIComponent(query)}`)
+        alert('No se encontraron resultados para la búsqueda.')
       }
-    } catch {
-      navigate(`/inventario?q=${encodeURIComponent(query)}`)
+    } catch (error) {
+      alert('No se encontraron resultados para la búsqueda.')
     } finally {
       setSearching(false)
       setMenuOpen(false)
@@ -57,7 +59,7 @@ export default function Navbar() {
         </button>
         <Link to="/" className="block">
           <img
-            src="/src/assets/blend-logo.png"
+            src="/blend-logo.png"
             alt="blend logo"
             className="h-32 w-auto max-w-[240px] object-contain mx-auto"
           />
@@ -70,7 +72,7 @@ export default function Navbar() {
           flex flex-col gap-3
           overflow-hidden transition-all duration-300 ease-out
           ${menuOpen ? 'max-h-[600px] opacity-100 translate-y-0 pointer-events-auto' : 'max-h-0 opacity-0 -translate-y-2 pointer-events-none'}
-          md:mt-3 md:flex md:flex-row md:items-center md:gap-3 md:max-h-none md:opacity-100 md:translate-y-0 md:overflow-visible md:pointer-events-auto
+          md:mt-3 md:flex md:flex-row md:items-center md:gap-3 items-start md:max-h-none md:opacity-100 md:translate-y-0 md:overflow-visible md:pointer-events-auto
         `}
       >
         <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-auto">

@@ -42,7 +42,7 @@ export default function MasVendidos() {
 
   if (!data.length) {
     return (
-      <p className="text-center text-gray-500">
+      <p className="text-center text-gray-700">
         No se encontraron ventas este mes.
       </p>
     )
@@ -50,25 +50,25 @@ export default function MasVendidos() {
 
   return (
     <div className="">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 text-center">
+      <h2 className="text-xl font-semibold mb-4 text-center">
         🏆 Vinos Más Vendidos del Mes
       </h2>
       <div className="flex flex-col">
         {data.map((item, index) => (
           <div
             key={index}
-            className="bg-white p-4 border border-gray-100 h-[120px]"
+            className="bg-white p-4 border border-gray-400 h-[140px]"
           >
             <h3 className="text-lg font-semibold">
               {item.vino_nombre}
             </h3>
             <div className='flex justify-between'>
               <div>
-                <p className="text-sm text-gray-600">
-                  Total botellas: <span className="font-medium">{item.botellas_vendidas}</span>
+                <p className="text-sm text-gray-700">
+                  Total botellas: <span className="font-semibold">{item.botellas_vendidas}</span>
                 </p>
-                <p className="text-sm text-gray-600">
-                  Veces vendido: <span className="font-medium">{item.cantidad_ventas}</span>
+                <p className="text-sm text-gray-700">
+                  Veces vendido: <span className="font-semibold">{item.cantidad_ventas}</span>
                 </p>
               </div>
               <p className="text-sm text-blend-green font-semibold mt-2">

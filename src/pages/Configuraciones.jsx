@@ -131,7 +131,7 @@ export default function Configuraciones() {
               <button
                 onClick={() => handleSave(field)}
                 disabled={loading}
-                className="text-sm bg-blend-pink hover:bg-blend-pink-dark text-white px-3 py-1 rounded"
+                className="text-sm bg-blend-pink hover:bg-blend-pink-dark hover:cursor-pointer text-white px-3 py-1 rounded"
               >
                 {loading ? "Guardando..." : "Guardar"}
               </button>

@@ -34,18 +34,21 @@ export default function AcumuladoList() {
       {loading && <div className="text-gray-600">Cargando lista...</div>}
       {error && <div className="text-red-600">Error: {error}</div>}
       {!loading && !error && (
-        <ul className="divide-y divide-gray-200 border border-gray-100 bg-white">
+        <ul className="divide-y-2 divide-gray-400 border border-gray-400 bg-white">
           {items.map((w) => (
-            <li key={w.id || w._id || w.codigo} className="p-4 bg-white h-[120px]">
+            <li key={w.id || w._id || w.codigo} className="p-4 bg-white md:h-[140px]">
               <div className="text-lg font-semibold">{w.nombre || w.name || 'Sin nombre'}</div>
-              <div className="flex justify-between h-full">
+              <div className="flex flex-col md:flex-row justify-between h-fit">
                 <div>
                   <div className="text-sm text-gray-700">{w.codigo || w.varietal || ''}</div>
+                  <div className='text-sm text-gray-700'>{w.cepa || ""}</div>
+                  <div className="text-sm text-gray-700">{w.anejamiento || ''}</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-700">Total: {w.total ?? '-'}</div>
-                  <div className="text-sm text-gray-700">Precio: {w.costo ?? '-'}</div>
-                  <div className="text-sm text-gray-700">Precio recomendado: {w.precioRecomendado ?? '-'}</div>
+                  <div className="text-sm text-gray-700">Total: <span className="font-semibold">{w.total ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio: <span className="font-semibold">${w.costo ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio recomendado: <span className="font-semibold">${w.precioRecomendado ?? '-'}</span></div>
+                  <div className="text-sm text-gray-700">Precio de Oferta: <span className="font-semibold">${w.precioOferta ?? '-'}</span></div>
                 </div>
                 
               </div>

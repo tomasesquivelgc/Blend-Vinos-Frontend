@@ -37,7 +37,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-blend-yellow-gradient py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <img src="/src/assets/blend-logo.png" alt="Blend logo" />
+        <img src="/blend-logo.png" alt="Blend logo" />
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Iniciar Sesión
@@ -82,7 +82,19 @@ export default function Login() {
 
           {error && (
             <div className="text-red-600 text-sm text-center">
-              {error}
+              {(() => {
+                try {
+                  // Extract JSON part if it exists
+                  const match = error.match(/{.*}/)
+                  if (match) {
+                    const parsed = JSON.parse(match[0])
+                    return parsed.message || 'Ocurrió un error'
+                  }
+                  return error
+                } catch {
+                  return 'Ocurrió un error inesperado'
+                }
+              })()}
             </div>
           )}
 

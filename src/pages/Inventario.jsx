@@ -6,8 +6,8 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 export default function Inventario() {
   const location = useLocation()
   const navigate = useNavigate()
-  const [wines, setWines] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [wines, setWines] = useState(location.state?.searchResults || [])
+  const [loading, setLoading] = useState(!location.state?.searchResults)
   const [error, setError] = useState(null)
   const [noResultsMessage, setNoResultsMessage] = useState('')
   const [page, setPage] = useState(0)
@@ -20,14 +20,22 @@ export default function Inventario() {
   const q = queryParams.get('q')?.trim() || ''
 
   useEffect(() => {
+    if (location.state?.searchResults) {
+      // If search results are passed via state, update wines and skip fetching
+      setWines(location.state.searchResults)
+      setLoading(false)
+      setError(null)
+      setNoResultsMessage('')
+      return
+    }
+
     const abortController = new AbortController()
-  setLoading(true)
-  setError(null)
-  setNoResultsMessage('')
+    setLoading(true)
+    setError(null)
+    setNoResultsMessage('')
 
     async function load() {
       try {
-        // Use paginated endpoint for both normal listing and searches (backend should support `q` param)
         const data = await fetchPaginatedWines({ page, limit, order, orderBy, q, signal: abortController.signal })
         const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? []
         setWines(list)
@@ -36,8 +44,6 @@ export default function Inventario() {
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          // If we searched (q) and the backend returned 404 / Not Found,
-          // show a friendly message instead of the technical error.
           const msg = String(err?.message || '').toLowerCase()
           if (q && (msg.includes('404') || msg.includes('not found') || msg.includes('no se encontro') || msg.includes('notfound'))) {
             setWines([])
@@ -54,19 +60,26 @@ export default function Inventario() {
     load()
 
     return () => abortController.abort()
-  }, [location.key, page, limit, order, orderBy, q])
+  }, [location.key, page, limit, order, orderBy, q, location.state])
 
   // Reset to first page when the search query changes
   useEffect(() => {
     setPage(0)
   }, [q])
 
+  // Reset to first page when search results are provided via navigation state
+  useEffect(() => {
+    if (location.state?.searchResults) {
+      setPage(0)
+    }
+  }, [location.state?.searchResults])
+
   // We no longer filter client-side — the API returns matching wines when `q` is set.
   const filteredWines = useMemo(() => wines, [wines])
 
   const handleClearSearch = () => {
     queryParams.delete('q')
-    navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true })
+    navigate({ pathname: '/inventario', search: queryParams.toString() ? `?${queryParams}` : '' }, { replace: true, state: null })
   }
 
   const handleCreate = () => navigate('/inventario/nuevo')
@@ -132,19 +145,28 @@ export default function Inventario() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredWines.map((wine) => (
               <div key={wine.id || wine._id} className="rounded border border-gray-200 p-4 shadow-sm bg-white">
-                <div className="mb-1 flex items-start justify-between">
+                <div className="mb-1 flex items-start justify-between flex-col gap-2">
                   <div>
                     <div className="text-lg font-medium">{wine.nombre || 'Sin nombre'}</div>
-                    <div className="text-sm text-gray-600">{wine.codigo || 'Codigo desconocido'}</div>
-                    <div className="text-sm text-gray-600">{wine.cepa || 'Cepa desconocida'}</div>
-                    <div className="text-sm text-gray-600">Costo: {wine.costo}</div>
-                    <div className="text-sm text-gray-600">Stock: {wine.total ?? wine.total}</div>
-                    <div className="text-sm text-gray-600">Precio Recomendado de venta: {wine.precioRecomendado ?? '-'}</div>
+                    <div className="text-sm text-gray-700">{wine.codigo || 'Codigo desconocido'}</div>
+                    <div className="text-sm text-gray-700">{wine.cepa || 'Cepa desconocida'}</div>
+                    <div className="text-sm text-gray-700">Costo: <span className="font-semibold">${wine.costo}</span></div>
+                    <div className="text-sm text-gray-700">Stock: <span className="font-semibold">{wine.total ?? wine.total}</span></div>
+                    {user?.rol_id === 1 &&
+                    <>
+                    <div className='text-sm text-gray-700'>Precio Socios: <span className="font-semibold">${wine.precioSocio}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Distribuidor: <span className="font-semibold">${wine.precioDistribuidor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor: <span className="font-semibold">${wine.precioRevendedor}</span></div>
+                    <div className='text-sm text-gray-700'>Precio Revendedor Socio: <span className="font-semibold">${wine.precioRevendedorSocio}</span></div>
+                    </>
+                    }
+                    <div className="text-sm text-gray-700">Precio Recomendado de venta: <span className="font-semibold">${wine.precioRecomendado ?? '-'}</span></div>
+                    <div className="text-sm text-gray-700">Precio de Oferta: <span className="font-semibold">${wine.precioOferta ?? '-'}</span></div>
                   </div>
                   {user?.rol_id === 1 && (
-                    <div className="flex gap-2">
-                      <button className="rounded border px-2 py-1 text-sm text-blend-purple" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
-                      <button className="rounded border px-2 py-1 text-sm text-red-700" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
+                    <div className="flex gap-2 w-full">
+                      <button className="rounded border px-2 py-1 text-sm text-blend-purple hover:cursor-pointer w-1/2" onClick={() => handleEdit(wine.id || wine._id)}>Editar</button>
+                      <button className="rounded border px-2 py-1 text-sm text-red-700 hover:cursor-pointer w-1/2" onClick={() => handleDelete(wine.id || wine._id)}>Eliminar</button>
                     </div>
                   )}
                 </div>
@@ -157,18 +179,18 @@ export default function Inventario() {
           <div className="mt-4 flex items-center justify-center gap-4">
             <button
               type="button"
-              className={`px-3 py-1 rounded border ${page === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              className={`px-3 py-1 rounded border ${page === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 border-blend-purple hover:cursor-pointer'}`}
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
             >
               ← Anterior
             </button>
 
-            <span className="text-sm text-gray-600">Página {page + 1}</span>
+            <span className="text-sm text-gray-700">Página {page + 1}</span>
 
             <button
               type="button"
-              className={`px-3 py-1 rounded border ${(wines.length < limit) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+              className={`px-3 py-1 rounded border ${(wines.length < limit) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 border-blend-purple hover:cursor-pointer'}`}
               onClick={() => setPage((p) => p + 1)}
               disabled={wines.length < limit}
             >

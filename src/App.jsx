@@ -42,7 +42,7 @@ function AppContent() {
   }
 
   return (
-    <div className="p-2 bg-blend-yellow-gradient min-h-screen">
+    <div className="p-2 bg-blend-yellow-gradient min-h-screen font-sans">
       <Navbar />
 
       <Routes>
