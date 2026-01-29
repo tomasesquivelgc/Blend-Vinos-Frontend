@@ -107,16 +107,11 @@ export default function Historial() {
           {data.map((item) => (
             <div
               key={item.id}
-              className="border border-gray-400 p-3 bg-white grid grid-cols-1 md:grid-cols-7 items-center"
+              className="border border-gray-400 p-3 bg-white grid grid-cols-1 md:grid-cols-5 items-center"
             >
               {/* Fecha */}
               <div className="text-sm text-gray-600">
                 {item.fecha ? new Date(item.fecha).toLocaleString() : 'Sin fecha'}
-              </div>
-
-              {/* Vino */}
-              <div className="font-medium">
-                {item.vino_nombre || (item.vino_id ? `Vino #${item.vino_id}` : 'Sin vino')}
               </div>
 
               {/* Tipo */}
@@ -132,15 +127,6 @@ export default function Historial() {
               {/* Cliente */}
               <div className="text-sm text-gray-700">
                 {item.nombre_de_cliente != null ? `Cliente: ${item.nombre_de_cliente}` : 'Sin cliente'}
-              </div>
-
-              {/* Cantidad */}
-              <div
-                className={`text-lg font-semibold text-right md:text-left ${
-                  item.accion === 'VENTA' ? 'text-green-700' : item.accion ? 'text-blue-700' : 'text-gray-700'
-                }`}
-              >
-                {item.cantidad ?? '—'}
               </div>
 
               {/* Precio */}
