@@ -12,7 +12,6 @@ export default function Movimientos() {
 
   // inputs temporales
   const [wineCode, setWineCode] = useState('')
-  const [quantity, setQuantity] = useState(1)
 
   // lista real
   const [items, setItems] = useState([]) 
@@ -48,7 +47,7 @@ export default function Movimientos() {
 
   // --- agregar item (con control de duplicados) ---
   function addItem() {
-    if (!wineCode.trim() || Number(quantity) <= 0) return
+    if (!wineCode.trim()) return
 
     setItems(prev => {
       const existing = prev.find(
@@ -56,25 +55,40 @@ export default function Movimientos() {
       )
 
       if (existing) {
+        // Si ya existe, incrementar la cantidad en 1 (manejar '' como 0)
         return prev.map(i =>
           i.wineCode.toLowerCase() === wineCode.trim().toLowerCase()
-            ? { ...i, quantity: i.quantity + Number(quantity) }
+            ? { ...i, quantity: (Number(i.quantity) || 0) + 1 }
             : i
         )
       }
 
       return [
         ...prev,
-        { wineCode: wineCode.trim(), quantity: Number(quantity) }
+        { wineCode: wineCode.trim(), quantity: 1 }
       ]
     })
 
     setWineCode('')
-    setQuantity(1)
+  }
+
+  // --- actualizar cantidad de un item (permitir campo vacío '') ---
+  function updateItemQuantity(index, newQuantity) {
+    // permitir que el usuario borre el valor por completo (newQuantity === '')
+    if (newQuantity === '') {
+      setItems(prev => prev.map((item, i) => (i === index ? { ...item, quantity: '' } : item)))
+      return
+    }
+
+    const qty = Number(newQuantity)
+    if (isNaN(qty) || qty < 0) return
+
+    setItems(prev => prev.map((item, i) => (i === index ? { ...item, quantity: qty } : item)))
   }
 
   const canSubmit = useMemo(() => {
-    return !submitting && items.length > 0 && type
+    const allQuantitiesValid = items.length > 0 && items.every(i => i.quantity !== '' && Number(i.quantity) > 0)
+    return !submitting && allQuantitiesValid && type
   }, [submitting, items, type])
 
   async function handleSubmit(e) {
@@ -86,6 +100,13 @@ export default function Movimientos() {
     setSuccess('')
 
     try {
+      // validar cantidades antes de enviar
+      const invalid = items.some(i => i.quantity === '' || Number(i.quantity) <= 0 || isNaN(Number(i.quantity)))
+      if (invalid) {
+        setError('Por favor complete todas las cantidades con valores mayores a 0')
+        setSubmitting(false)
+        return
+      }
       const normalizedComment =
         comment.trim() === '' ? null : comment.trim()
 
@@ -99,7 +120,7 @@ export default function Movimientos() {
 
       const payload = {
         wine_id: items.map(i => i.wineCode),
-        quantity: items.map(i => i.quantity),
+        quantity: items.map(i => Number(i.quantity)),
         type,
         comment: normalizedComment,
         client_id: clientId ? Number(clientId) : null,
@@ -113,7 +134,6 @@ export default function Movimientos() {
       // reset
       setItems([])
       setWineCode('')
-      setQuantity(1)
       setClientId('')
       setComment('')
     } catch (e) {
@@ -174,23 +194,7 @@ export default function Movimientos() {
                 addItem()
               }
             }}
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Cantidad</label>
-          <input
-            type="number"
-            min={1}
-            className="w-full border rounded px-3 py-2 bg-white"
-            value={quantity}
-            onChange={e => setQuantity(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                addItem()
-              }
-            }}
+            placeholder="Ingrese el código y presione Enter"
           />
         </div>
 
@@ -202,22 +206,29 @@ export default function Movimientos() {
               {items.map((item, index) => (
                 <li
                   key={index}
-                  className="flex justify-between items-center bg-white p-2 rounded border"
+                  className="flex justify-between items-center bg-white p-2 rounded border gap-2"
                 >
-                  <span>
-                    <strong>{item.wineCode}</strong> × {item.quantity}
-                  </span>
-                  <button
-                    type="button"
-                    className="text-red-600 text-sm"
-                    onClick={() =>
-                      setItems(prev =>
-                        prev.filter((_, i) => i !== index)
-                      )
-                    }
-                  >
-                    Quitar
-                  </button>
+                  <span className="font-medium">{item.wineCode}</span>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      min={1}
+                      className="w-20 border rounded px-2 py-1 text-center"
+                      value={item.quantity}
+                      onChange={e => updateItemQuantity(index, e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="text-red-600 text-sm px-2"
+                      onClick={() =>
+                        setItems(prev =>
+                          prev.filter((_, i) => i !== index)
+                        )
+                      }
+                    >
+                      Quitar
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
