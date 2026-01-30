@@ -72,9 +72,9 @@ export default function DetallesHistorial() {
           {data.map((entry) => (
             <div key={entry.id} className="border p-4 bg-white space-y-2">
               <div><strong>ID:</strong> {entry.id}</div>
-              <div><strong>Movimiento ID:</strong> {entry.movimiento_id ?? entry.movement_id ?? '—'}</div>
-              <div><strong>Vino ID:</strong> {entry.vino_id ?? entry.wine_id ?? '—'}</div>
-              <div><strong>Nombre del vino:</strong> {entry.vino_nombre ?? entry.wine_name ?? '—'}</div>
+              <div><strong>Movimiento ID:</strong> {entry.movimiento_id ?? '—'}</div>
+              <div><strong>Vino Codigo:</strong> {entry.vino_codigo ?? '—'}</div>
+              <div><strong>Nombre del vino:</strong> {entry.vino_nombre ?? '—'}</div>
               <div><strong>Cantidad:</strong> {entry.cantidad ?? '—'}</div>
               <div><strong>Precio unitario:</strong> {entry.precio_unitario != null ? `$${entry.precio_unitario}` : '—'}</div>
             </div>
