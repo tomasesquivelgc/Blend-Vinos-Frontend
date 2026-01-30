@@ -197,6 +197,31 @@ export async function fetchMovementsByMonth({ year, month, movementType, signal 
   return await response.json()
 }
 
+export async function fetchMovementDetails(id, { signal } = {}) {
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const token = getAuthToken()
+
+  if (!baseUrl) throw new Error('VITE_API_BASE is not set')
+  if (!token) throw new Error('No authentication token')
+  if (!id) throw new Error('id is required')
+
+  const response = await fetch(`${baseUrl}/api/movements/details/${encodeURIComponent(id)}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    signal,
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Request failed: ${response.status} ${response.statusText} - ${text}`)
+  }
+
+  return await response.json()
+}
+
 export async function createWine(body, { signal } = {}) {
   const baseUrl = import.meta.env.VITE_API_BASE
   const token = getAuthToken()

@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home.jsx";
 import Inventario from "./pages/Inventario.jsx";
 import Historial from "./pages/Historial.jsx";
+import DetallesHistorial from "./pages/DetallesHistorial.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Usuarios from "./pages/Usuarios.jsx";
 import Configuraciones from "./pages/Configuraciones.jsx";
@@ -67,6 +68,14 @@ function AppContent() {
           element={
             <AdminRoute>
               <Historial />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/historial/:id"
+          element={
+            <AdminRoute>
+              <DetallesHistorial />
             </AdminRoute>
           }
         />

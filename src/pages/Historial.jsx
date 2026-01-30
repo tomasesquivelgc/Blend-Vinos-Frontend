@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fetchMovementsByMonth } from '../lib/api.js'
 
 export default function Historial() {
@@ -9,6 +10,7 @@ export default function Historial() {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -107,7 +109,11 @@ export default function Historial() {
           {data.map((item) => (
             <div
               key={item.id}
-              className="border border-gray-400 p-3 bg-white grid grid-cols-1 md:grid-cols-5 items-center"
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(`/historial/${item.id}`)}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/historial/${item.id}`) }}
+              className="border border-gray-400 p-3 bg-white grid grid-cols-1 md:grid-cols-5 items-center hover:cursor-pointer hover:bg-gray-50"
             >
               {/* Fecha */}
               <div className="text-sm text-gray-600">
