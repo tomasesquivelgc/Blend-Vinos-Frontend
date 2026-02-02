@@ -48,7 +48,7 @@ export default function DetallesHistorial() {
   return (
     <div className="p-6 min-h-screen">
       <button
-        className="mb-4 text-purple-600 hover:underline"
+        className="mb-4 text-blend-purple hover:underline hover:cursor-pointer hover:text-blend-purple-dark"
         onClick={() => navigate(-1)}
       >
         ← Volver
@@ -82,46 +82,49 @@ export default function DetallesHistorial() {
 
           <hr className="my-6" />
 
-          {/* TABLA */}
-          <table className="w-full border-collapse text-md">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left py-2">Cantidad</th>
-                <th className="text-left py-2">Código</th>
-                <th className="text-left py-2">Nombre</th>
-                <th className="text-right py-2">Importe</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {detalles.map((d) => {
-                const importe =
-                  Number(d.cantidad ?? 0) * Number(d.precio_unitario ?? 0)
-
-                return (
-                  <tr key={d.id} className="border-b last:border-0">
-                    <td className="py-2">{d.cantidad}</td>
-                    <td className="py-2">{d.vino_codigo ?? '—'}</td>
-                    <td className="py-2">{d.vino_nombre ?? '—'}</td>
-                    <td className="py-2 text-right">
-                      ${importe.toFixed(2)}
-                    </td>
+          {/* TABLA / DETALLES */}
+          {detalles.length === 0 ? (
+            <div className="mt-4 text-sm text-gray-500">
+              No hay detalles para este movimiento.
+            </div>
+          ) : (
+            <>
+              <table className="w-full border-collapse text-md">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2">Cantidad</th>
+                    <th className="text-left py-2">Código</th>
+                    <th className="text-left py-2">Nombre</th>
+                    <th className="text-right py-2">Importe</th>
                   </tr>
-                )
-              })}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {detalles.map((d) => {
+                    const importe =
+                      Number(d.cantidad ?? 0) * Number(d.precio_unitario ?? 0)
+                    return (
+                      <tr key={d.id} className="border-b last:border-0">
+                        <td className="py-2">{d.cantidad}</td>
+                        <td className="py-2">{d.vino_codigo ?? '—'}</td>
+                        <td className="py-2">{d.vino_nombre ?? '—'}</td>
+                        <td className="py-2 text-right">
+                          ${importe.toFixed(2)}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              <hr className="my-6" />
+              {/* TOTAL */}
+              <div className="flex justify-end text-lg font-bold">
+                <span className="mr-4">TOTAL</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
 
+            </>
+          )}
           <hr className="my-6" />
-
-          {/* TOTAL */}
-          <div className="flex justify-end text-lg font-bold">
-            <span className="mr-4">TOTAL</span>
-            <span>${total.toFixed(2)}</span>
-          </div>
-
-          <hr className="my-6" />
-
           {/* COMENTARIO */}
           <div className="text-sm">
             <strong>Comentario:</strong>{' '}

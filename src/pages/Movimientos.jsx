@@ -35,7 +35,7 @@ export default function Movimientos() {
         setUsers(Array.isArray(usersData) ? usersData : usersData?.items ?? [])
       } catch (e) {
         if (e?.name === 'AbortError' || e?.code === 20) return
-        setError(e?.message || 'Failed to load users')
+        setError(e?.message || 'Error al cargar usuarios')
       } finally {
         setLoading(false)
       }
@@ -49,18 +49,19 @@ export default function Movimientos() {
   function addItem() {
     if (!wineCode.trim()) return
 
+    // limpiar mensajes previos
+    setError('')
+    setSuccess('')
+
     setItems(prev => {
       const existing = prev.find(
         i => i.wineCode.toLowerCase() === wineCode.trim().toLowerCase()
       )
 
       if (existing) {
-        // Si ya existe, incrementar la cantidad en 1 (manejar '' como 0)
-        return prev.map(i =>
-          i.wineCode.toLowerCase() === wineCode.trim().toLowerCase()
-            ? { ...i, quantity: (Number(i.quantity) || 0) + 1 }
-            : i
-        )
+        // Si ya existe, no incrementar; mostrar mensaje de error
+        setError('Ese vino ya fue agregado a la lista')
+        return prev
       }
 
       return [
@@ -81,7 +82,7 @@ export default function Movimientos() {
     }
 
     const qty = Number(newQuantity)
-    if (isNaN(qty) || qty < 0) return
+    if (isNaN(qty) || qty <= 0) return
 
     setItems(prev => prev.map((item, i) => (i === index ? { ...item, quantity: qty } : item)))
   }
@@ -100,13 +101,6 @@ export default function Movimientos() {
     setSuccess('')
 
     try {
-      // validar cantidades antes de enviar
-      const invalid = items.some(i => i.quantity === '' || Number(i.quantity) <= 0 || isNaN(Number(i.quantity)))
-      if (invalid) {
-        setError('Por favor complete todas las cantidades con valores mayores a 0')
-        setSubmitting(false)
-        return
-      }
       const normalizedComment =
         comment.trim() === '' ? null : comment.trim()
 
@@ -126,7 +120,6 @@ export default function Movimientos() {
         client_id: clientId ? Number(clientId) : null,
         nombre_de_cliente: clientName,
       }
-      console.log('Payload movimiento:', payload)
       await createMovement(payload)
 
       setSuccess('Movimiento creado correctamente')
@@ -137,7 +130,7 @@ export default function Movimientos() {
       setClientId('')
       setComment('')
     } catch (e) {
-      setError(e?.message || 'Error creating movement')
+      setError(e?.message || 'Error al crear movimiento')
     } finally {
       setSubmitting(false)
     }
@@ -154,7 +147,7 @@ export default function Movimientos() {
             className={`px-4 py-2 rounded ${
               type === 'COMPRA'
                 ? 'bg-blend-pink text-white'
-                : 'bg-gray-200'
+                : 'bg-gray-200 hover:bg-gray-300 hover:cursor-pointer'
             }`}
             onClick={() => setType('COMPRA')}
           >
@@ -166,7 +159,7 @@ export default function Movimientos() {
             className={`px-4 py-2 rounded ${
               type === 'VENTA'
                 ? 'bg-blend-pink text-white'
-                : 'bg-gray-200'
+                : 'bg-gray-200 hover:bg-gray-300 hover:cursor-pointer'
             }`}
             onClick={() => setType('VENTA')}
           >
@@ -196,16 +189,30 @@ export default function Movimientos() {
             }}
             placeholder="Ingrese el código y presione Enter"
           />
+
+          <div className="mt-2">
+            <button
+              type="button"
+              onClick={addItem}
+              className="px-4 py-2 bg-blend-purple hover:bg-blend-purple-dark hover:cursor-pointer text-white rounded"
+            >
+              Ingresar
+            </button>
+          </div>
         </div>
 
         {/* LISTA */}
-        {items.length > 0 && (
           <div className="border rounded p-3 bg-gray-50">
             <p className="font-semibold mb-2">Vinos agregados</p>
+            {items.length === 0 && (
+              <p className="text-sm text-gray-600 mb-2">
+                No hay vinos en la lista.
+              </p>
+            )}
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li
-                  key={index}
+                  key={item.wineCode}
                   className="flex justify-between items-center bg-white p-2 rounded border gap-2"
                 >
                   <span className="font-medium">{item.wineCode}</span>
@@ -233,7 +240,6 @@ export default function Movimientos() {
               ))}
             </ul>
           </div>
-        )}
 
         <div>
           <label className="block mb-1">Comentario</label>
@@ -265,13 +271,13 @@ export default function Movimientos() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="px-4 py-2 bg-blend-purple text-white rounded disabled:opacity-50"
+            className="px-4 py-2 bg-blend-purple text-white rounded hover:cursor-pointer disabled:cursor-default disabled:opacity-50 hover:bg-blend-purple-dark disabled:hover:bg-blend-purple"
           >
             Guardar Movimiento
           </button>
           <button
             type="button"
-            className="px-4 py-2 border rounded"
+            className="px-4 py-2 border rounded hover:cursor-pointer hover:bg-gray-100"
             onClick={() => navigate(-1)}
           >
             Cancelar
