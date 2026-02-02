@@ -5,7 +5,8 @@ import { fetchMovementDetails } from '../lib/api.js'
 export default function DetallesHistorial() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [data, setData] = useState(null)
+
+  const [detalles, setDetalles] = useState([])
   const [historial, setHistorial] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -13,72 +14,119 @@ export default function DetallesHistorial() {
   useEffect(() => {
     if (!id) return
     const ac = new AbortController()
+
     async function load() {
       setLoading(true)
       setError('')
       try {
         const res = await fetchMovementDetails(id, { signal: ac.signal })
-        // Backend now returns an object with keys: { detalles, historial }
+
         if (res && typeof res === 'object') {
-          const detallesRaw = res.detalles
-          // normalize detalles to array
-          let detalles = []
-          if (Array.isArray(detallesRaw)) detalles = detallesRaw
-          else if (detallesRaw == null) detalles = []
-          else detalles = [detallesRaw]
-          setData(detalles)
+          const raw = res.detalles
+          if (Array.isArray(raw)) setDetalles(raw)
+          else if (raw) setDetalles([raw])
+          else setDetalles([])
           setHistorial(res.historial ?? null)
-        } else {
-          // fallback: previous behavior - single object or null
-          if (Array.isArray(res)) setData(res)
-          else if (res == null) setData([])
-          else setData([res])
-          setHistorial(null)
         }
-      console.log(res)
       } catch (e) {
-        if (e && (e.name === 'AbortError' || e.code === 20)) return
+        if (e?.name === 'AbortError') return
         setError(e?.message || 'Error cargando detalles')
       } finally {
         setLoading(false)
       }
     }
+
     load()
     return () => ac.abort()
   }, [id])
 
+  const total = detalles.reduce(
+    (acc, d) => acc + Number(d.precio_unitario ?? 0) * Number(d.cantidad ?? 0),
+    0
+  )
+
   return (
-    <div className="p-6">
-      <button className="mb-4 text-blend-purple" onClick={() => navigate(-1)}>← Volver</button>
+    <div className="p-6 min-h-screen">
+      <button
+        className="mb-4 text-purple-600 hover:underline"
+        onClick={() => navigate(-1)}
+      >
+        ← Volver
+      </button>
 
       {loading && <p>Cargando...</p>}
       {error && <p className="text-red-600">{error}</p>}
 
       {historial && (
-        <div className="border p-4 bg-white mb-4">
-          <div className="space-y-1">
-            <div><strong>Acción:</strong> {historial.accion ?? '—'}</div>
-            <div><strong>Comentario:</strong> {historial.comentario ?? '—'}</div>
-            <div><strong>Costo:</strong> {historial.costo != null ? `$${historial.costo}` : '—'}</div>
-            <div><strong>Fecha:</strong> {historial.fecha ? new Date(historial.fecha).toLocaleString() : '—'}</div>
-            <div><strong>Cliente:</strong> {historial.nombre_de_cliente ?? '—'}</div>
-          </div>
-        </div>
-      )}
+        <div className="max-w-4xl mx-auto bg-white p-8 shadow-md border">
 
-      {data && (
-        <div className="space-y-4">
-          {data.length === 0 && <p>No hay detalles para este movimiento.</p>}
-          {data.map((entry) => (
-            <div key={entry.id} className="border p-4 bg-white space-y-2">
-              <div><strong>ID:</strong> {entry.id}</div>
-              <div><strong>Movimiento ID:</strong> {entry.movimiento_id ?? '—'}</div>
-              <div><strong>Vino Codigo:</strong> {entry.vino_codigo ?? '—'}</div>
-              <div><strong>Nombre del vino:</strong> {entry.vino_nombre ?? '—'}</div>
-              <div><strong>Cantidad:</strong> {entry.cantidad ?? '—'}</div>
-              <div><strong>Precio unitario:</strong> {entry.precio_unitario != null ? `$${entry.precio_unitario}` : '—'}</div>
+          {/* ENCABEZADO */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold uppercase text-center">
+              {historial.accion ?? 'Movimiento'}
+            </h1>
+
+            <div className="mt-2 space-y-1 text-md">
+              <div>
+                <strong>Fecha:</strong>{' '}
+                {historial.fecha
+                  ? new Date(historial.fecha).toLocaleDateString()
+                  : '—'}
+              </div>
+              <div>
+                <strong>Cliente:</strong>{' '}
+                {historial.nombre_de_cliente ?? '—'}
+              </div>
             </div>
-          ))}
+          </div>
+
+          <hr className="my-6" />
+
+          {/* TABLA */}
+          <table className="w-full border-collapse text-md">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">Cantidad</th>
+                <th className="text-left py-2">Código</th>
+                <th className="text-left py-2">Nombre</th>
+                <th className="text-right py-2">Importe</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {detalles.map((d) => {
+                const importe =
+                  Number(d.cantidad ?? 0) * Number(d.precio_unitario ?? 0)
+
+                return (
+                  <tr key={d.id} className="border-b last:border-0">
+                    <td className="py-2">{d.cantidad}</td>
+                    <td className="py-2">{d.vino_codigo ?? '—'}</td>
+                    <td className="py-2">{d.vino_nombre ?? '—'}</td>
+                    <td className="py-2 text-right">
+                      ${importe.toFixed(2)}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+
+          <hr className="my-6" />
+
+          {/* TOTAL */}
+          <div className="flex justify-end text-lg font-bold">
+            <span className="mr-4">TOTAL</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+
+          <hr className="my-6" />
+
+          {/* COMENTARIO */}
+          <div className="text-sm">
+            <strong>Comentario:</strong>{' '}
+            {historial.comentario ?? '—'}
+          </div>
         </div>
       )}
     </div>
